@@ -13,11 +13,13 @@ class UserView(APIView):
         
         user_id = request.query_params.get("user_id")
         
-        if not user:
+        print("user_id:", user_id)
+        
+        if not user_id:
             return Response({"error": "User not found"}, status=404)
         
-        user = User.objects.get(pk=user_id)
-        user_serializer = UserSerializer(user)
+        user_id = User.objects.get(pk=user_id)
+        user_serializer = UserSerializer(user_id)
         
         # filter get all tasks with this specific user_id
         user_tasks = Task.objects.filter(user_id=user_id)
