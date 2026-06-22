@@ -1,0 +1,46 @@
+.mainLayout {
+    width: 100%;
+    height: 100%;
+    /* background-color: palegreen; */
+    display: flex;
+    /* position: relative; */
+    overflow-y: hidden;
+    max-height: 100vh;
+}
+
+
+.sideNav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    /* background-color: #dcfce8; */
+    padding: 20px;
+    background-color: red;
+}
+
+@media (max-width: 768px) {
+    .sideNav {
+        display: none;
+    }
+}
+
+.mainContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    overflow: auto;
+    flex-direction: column;
+    position: relative;
+
+}
+
+
+.contentWrapper {
+    max-width: 1300px;
+    width: 100%;
+    height: fit-content;
+    /* background-color: rgb(170, 13, 39); */
+}

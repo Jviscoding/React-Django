@@ -1,0 +1,440 @@
+/* --- Base Variables & Layout containers --- */
+.modalFixedContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.backdropOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(2, 6, 23, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.dark .backdropOverlay {
+  background-color: rgba(2, 6, 23, 0.7);
+}
+
+.modalCard {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 32rem; /* max-w-lg */
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  
+  /* Modal Animation Simulation */
+  animation: modalAnimateIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.dark .modalCard {
+  background-color: #0f172a;
+  border-color: #1e293b;
+}
+
+@keyframes modalAnimateIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Header Section --- */
+.modalHeader {
+  padding: 1.125rem 1.5rem;
+  border-b: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.dark .modalHeader {
+  border-color: #1e293b;
+}
+
+.modalHeaderTitle {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.dark .modalHeaderTitle {
+  color: #ffffff;
+}
+
+.closeHeaderButton {
+  color: #94a3b8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.closeHeaderButton:hover {
+  color: #475569;
+}
+
+.dark .closeHeaderButton:hover {
+  color: #e2e8f0;
+}
+
+/* --- Form Framework Elements --- */
+.formScrollableContainer {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.formWrapperSpace {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputGroupStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.flexSpaceBetweenAlignment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.formLabelBase {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.requiredAsterisk {
+  color: #f43f5e;
+}
+
+.relativePositionWrapper {
+  position: relative;
+}
+
+/* --- Pure Elements (Inputs, Select, Texts) --- */
+.inputElementText {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  transition: all 150ms ease;
+}
+
+.dark .inputElementText {
+  border-color: #1e293b;
+  background-color: #020617;
+  color: #ffffff;
+}
+
+.inputElementText:focus, .textareaElement:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #4f46e5;
+}
+
+.textareaElement {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  resize: none;
+  transition: all 150ms ease;
+}
+
+.dark .textareaElement {
+  border-color: #1e293b;
+  background-color: #020617;
+  color: #ffffff;
+}
+
+.responsiveThreeColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .responsiveThreeColumnGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.selectInputElement {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.dark .selectInputElement {
+  border-color: #1e293b;
+  background-color: #020617;
+  color: #ffffff;
+}
+
+.selectInputElement:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #4f46e5;
+}
+
+/* --- Features (AI Feature Ribbon & Checklists) --- */
+.aiGenerateButton {
+  background-color: #eef2ff;
+  color: #4f46e5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e0e7ff;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.aiGenerateButton:hover:not(:disabled) {
+  background-color: #e0e7ff;
+}
+
+.aiGenerateButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dark .aiGenerateButton {
+  background-color: rgba(49, 46, 129, 0.4);
+  border-color: rgba(30, 27, 75, 0.6);
+  color: #818cf8;
+}
+
+.animateSpinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.checklistSectionRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.dark .checklistSectionRoot {
+  border-color: rgba(30, 41, 59, 0.8);
+}
+
+.checklistSectionLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.subtaskScrollArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  max-height: 140px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.subtaskRowContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #f1f5f9;
+}
+
+.dark .subtaskRowContainer {
+  background-color: #020617;
+  border-color: rgba(30, 41, 59, 0.8);
+}
+
+.subtaskInteractiveLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.dark .subtaskInteractiveLabel {
+  color: #cbd5e1;
+}
+
+.subtaskNativeCheckbox {
+  border-radius: 0.25rem;
+  border-color: #cbd5e1;
+  color: #4f46e5;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.strikethroughMutedText {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.deleteSubbutton {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 0.125rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.deleteSubbutton:hover {
+  color: #f43f5e;
+}
+
+.flexGapAlignmentRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inputElementTextInline {
+  flex: 1;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  color: #0f172a;
+  transition: all 150ms ease;
+}
+
+.dark .inputElementTextInline {
+  border-color: #1e293b;
+  background-color: #020617;
+  color: #ffffff;
+}
+
+.addManualStepButton {
+  background-color: #f1f5f9;
+  color: #334155;
+  padding: 0 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.addManualStepButton:hover {
+  background-color: #e2e8f0;
+}
+
+.dark .addManualStepButton {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+.dark .addManualStepButton:hover {
+  background-color: #334155;
+}
+
+/* --- Modal Action Footer --- */
+.modalFooter {
+  padding: 1rem 1.5rem;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.dark .modalFooter {
+  background-color: rgba(30, 41, 59, 0.4);
+  border-color: #1e293b;
+}
+
+.cancelActionButton {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms;
+}
+
+.cancelActionButton:hover {
+  color: #1e293b;
+  background-color: #f1f5f9;
+}
+
+.dark .cancelActionButton:hover {
+  color: #e2e8f0;
+  background-color: #1e293b;
+}
+
+.submitActionButton {
+  background-color: #4f46e5;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
+  transition: all 150ms ease;
+}
+
+.submitActionButton:hover {
+  background-color: #4338ca;
+  box-shadow: 0 4px 12px -1px rgba(79, 70, 229, 0.25);
+}

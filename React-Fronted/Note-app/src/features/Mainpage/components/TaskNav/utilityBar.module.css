@@ -1,0 +1,197 @@
+/* Container Base Configurations */
+.container {
+  --bg-primary: #ffffff;
+  --bg-input: #f8fafc;
+  --border-color: #e2e8f0;
+  --text-main: #334155;
+  --text-meta: #94a3b8;
+  --badge-bg: #f1f5f9;
+  --badge-text: #334155;
+  --accent-color: #4f46e5;
+
+  background-color: var(--bg-primary);
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 20px;
+  }
+}
+
+/* Dark Mode Color Overrides */
+.container.dark {
+  --bg-primary: #0f172a;
+  --bg-input: #020617;
+  --border-color: #1e293b;
+  --text-main: #cbd5e1;
+  --text-meta: #64748b;
+  --badge-bg: #1e293b;
+  --badge-text: #cbd5e1;
+  --accent-color: #818cf8;
+}
+
+/* Row Formats */
+.topRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .topRow {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.bottomRow {
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Search Bar Segment */
+.searchWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-meta);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 44px 10px 44px;
+  font-size: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.clearSearchButton {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-meta);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.clearSearchButton:hover {
+  color: var(--text-main);
+}
+
+/* Active Filtering Elements */
+.tagIndicatorList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.metaLabel {
+  color: var(--text-meta);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filterBadge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background-color: var(--badge-bg);
+  color: var(--badge-text);
+  font-weight: 600;
+}
+
+.clearAllLinkButton {
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+}
+
+.clearAllLinkButton:hover {
+  text-decoration: underline;
+}
+
+/* Bottom Controls Layout */
+.selectorsGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.controlWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controlLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-meta);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Custom Uniform Dropdown Selector Styles */
+.selectDropdown {
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.selectDropdown:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px #4f46e5;
+}

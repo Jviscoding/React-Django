@@ -1,0 +1,24 @@
+.kpiWrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    animation: fadeIn 300ms ease;
+}
+
+/* lg breakpoint (1024px and up) */
+@media (min-width: 1024px) {
+    .kpiWrapper{
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Equivalent fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

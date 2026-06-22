@@ -26,7 +26,7 @@ class UserView(APIView):
         tasks_serializer = TaskSerializer(user_tasks, many=True)
         
         
-        return Response({"user": user_serializer.data, "tasks": tasks_serializer.data}, status=200)
+        return Response({"user": user_serializer.data, "tasks": tasks_serializer.data}, status=200) 
     
     """
      
@@ -35,3 +35,10 @@ class UserView(APIView):
         # tasks_serializer = TaskSerializer(user_tasks, many=True)
         
     """
+    
+    def put(self, request):
+        
+        
+        print("DADAAd")
+        
+        return Response({"data":"dadada"}, status=200) 
