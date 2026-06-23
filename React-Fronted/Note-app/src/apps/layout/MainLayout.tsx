@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import styles from './mainLayout.module.css'
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../shared/components/Sidebar";
+import { AuthContextProvider } from "../../features/Auth/context/AuthContext";
+import { AuthUiContextProvider } from "../../features/Auth/context/AuthUiContext";
 
 
 // export const supabase = createClient(
@@ -17,23 +19,24 @@ const MainLayout = () => {
     return (
 
 
-
         <div className={styles.mainLayout}>
 
 
-            <Sidebar/>  
+            <Sidebar />
             <main className={styles.mainContent}>
 
-                
- 
+
+
                 <div className={styles.contentWrapper}>
-                        <Outlet />
+                    <Outlet />
 
                 </div>
             </main>
 
 
         </div>
+
+
 
     )
 

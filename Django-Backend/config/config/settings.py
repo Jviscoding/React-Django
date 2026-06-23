@@ -124,6 +124,26 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# SUPABASE CONFIGS
+SUPABASE_JWKS_URL = (
+    "https://ufkkonkgvllmqdtxokal.supabase.co/auth/v1/.well-known/jwks.json"
+)
+
+SUPABASE_ISSUER = (
+    "https://ufkkonkgvllmqdtxokal.supabase.co/auth/v1"
+)
+
+SUPABASE_AUDIENCE = "authenticated"
+
+
+# REST API configs
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "core.authentication.SupabaseJWTAuthentication",
+    ],
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
