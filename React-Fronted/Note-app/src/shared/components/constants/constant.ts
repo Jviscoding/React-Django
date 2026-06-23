@@ -1,4 +1,4 @@
 export const serverAddress = {
-    ip: "http://192.168.1.61",
+    ip: "http://localhost",
     port: "5000"
 }
