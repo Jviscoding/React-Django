@@ -8,6 +8,7 @@ import {
     CurrencyDollarIcon,
     CogIcon,
 } from "@heroicons/react/24/outline";
+import  {useAuthContext}  from "../../features/Auth/hooks/useAuthContext.ts";
 
 
 
@@ -18,6 +19,7 @@ const Sidebar = () => {
     const linkRef = useRef<HTMLAnchorElement>(null);
     const [activePage, setActivePage] = useState("/dashboard");
     const [isNavBarHidden, setNavBarHidden] = useState(() => false)
+    const {authManager} = useAuthContext()
 
     const navItems = [
         {
@@ -108,6 +110,7 @@ const Sidebar = () => {
                 <button
                     onClick={() => {
                         setActivePage(logoutItem.activePath);
+                        authManager.signOut()
                     }}
                     className={`${styles.logoutBtn} ${styles.pushToBottom} ${activePage === logoutItem.activePath ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""}`}
                 >

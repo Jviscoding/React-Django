@@ -13,7 +13,7 @@ function App() {
       {/* Auth context provider */}
       <AuthContextProvider>
 
-        {/* auth ui provider */}
+        {/* auth ui provider */}  
         <AuthUiContextProvider>
 
 

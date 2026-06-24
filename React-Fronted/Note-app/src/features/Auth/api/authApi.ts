@@ -1,30 +1,29 @@
 import { data } from "react-router-dom";
-import { serverAddress } from "../../../shared/components/constants/constant";
+import { serverAddress } from "../../../shared/constants/constant.ts";
 import { useContext } from "react";
 import { useAuthContext } from "../hooks/useAuthContext.ts";
 import type { SignUpType } from "../hooks/useAuth";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 
 export type AuthApiType = {
 
-    getProfile: ()=>Promise<any>    
-    setProfile: (arg0: SignUpType)=>Promise<any>
+    getProfile: () => Promise<any>
+    setProfile: (arg0: SignUpType) => Promise<any>
 
 
 }
 
 
 
-export default function authApi(): AuthApiType {
+export default function authApi(supabaseClient: SupabaseClient | null): AuthApiType {
 
 
 
-
-    const { authManager } = useAuthContext();
 
     async function getAccessToken() {
         const session =
-            await authManager.supabaseClient?.auth.getSession();
+            await supabaseClient?.auth.getSession();
 
         return session?.data.session?.access_token ?? null;
     }

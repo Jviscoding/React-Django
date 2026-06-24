@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react"
-import { serverAddress } from "../../../shared/components/constants/constant"
+import { serverAddress } from "../../../shared/constants/constant"
 import { createClient, SupabaseClient } from "@supabase/supabase-js"
 import { LassoSelect } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import authApi from "../api/authApi"
 
 
 export type UseAuthType = {
 
-    supabaseClient: SupabaseClient | null
+    supabaseClient: SupabaseClient | null;
     setSupabaseClient: Dispatch<SetStateAction<SupabaseClient | null>>;
-
+    signIn: (Arg0: SignInType) => Promise<any>;
+    signUp: (Arg0: SignUpType) => Promise<any>;
+    signOut: () => Promise<any>
 }
 
 export type UserDataType = {
@@ -30,8 +33,8 @@ export type SignInType = {
 export type SignUpType = {
     email: string,
     password: string,
-    first_name: string,
-    last_name: string,
+    confirm_pass: string,
+    username: string,
     id: string
 }
 
@@ -45,6 +48,7 @@ export default function useAuth(): UseAuthType {
     const [userData, setUserData] = useState<UserDataType | null>(null)
     const nav = useNavigate()
 
+    const authApiManager = authApi(supabaseClient)
 
 
     // initialize supabase client 
@@ -79,17 +83,14 @@ export default function useAuth(): UseAuthType {
 
             if (data.session && !hasInitialized.current) {
 
+                // set user data
+                setUserInfo(data.session)
 
-
-                setUserData({
-                    id: data.session.user.id,
-                    email: data.session.user.email!,
-                    first_name: "",
-                    last_name: " "
-                })
 
                 // await setUserData(data.session)
                 hasInitialized.current = true
+
+                return
 
             }
 
@@ -104,17 +105,11 @@ export default function useAuth(): UseAuthType {
 
                 case "SIGNED_IN":
 
-                    console.log("AUTO LOGIN")
-
+                    console.log("SIGNED IN")
                     if (!hasInitialized.current) {
 
-
-                        setUserData({
-                            id: session?.user.id!,
-                            email: session?.user.email!,
-                            first_name: "",
-                            last_name: ""
-                        })
+                        // set user data
+                        setUserInfo(session)
 
 
                         hasInitialized.current = true
@@ -144,55 +139,52 @@ export default function useAuth(): UseAuthType {
 
 
 
-    const signUp = ({email, password, first_name, last_name, id}: SignUpType) => {
-        const start = async () => {
+    const signUp = async ({ email, password, username }: SignUpType) => {
 
 
-            if (!supabaseClient) return;
+        if (!supabaseClient) return;
 
-            const { data, error } = await supabaseClient?.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    emailRedirectTo: 'http://localhost:5173/redirect'
-                }
-
-            })
-
-
-            // error handling
-            switch (error?.code) {
-                case 'validation_failed':
-                    console.log(error.message)
-                    return;
-
-
-                default:
-                    break;
+        const { data, error } = await supabaseClient?.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                emailRedirectTo: 'http://localhost:5173/redirect'
             }
-
-            switch (error?.status) {
-                case 429:
-                    console.log('Too many request')
-                    return
-
-                case 422:
-                    return
-            }
-
-            // query additional cred
-            // const response = await authApiManager.signUpApi({
-            //     email: signUpForm.email!,
-            //     firstName: signUpForm.firstName,
-            //     lastName: signUpForm.lastName,
-            //     id: data.user!.id
-            // } as SignUpHook)
-
-
-
+        })
+        
+        if (error) {
+            return error
         }
 
-        start()
+        await authApiManager.setProfile({
+            username: username,
+            id: data.user?.id
+        } as SignUpType)
+
+
+
+        return data
+
+        // // error handling
+        // switch (error?.code) {
+        //     case 'validation_failed':
+        //         console.log(error.message)
+        //         return;
+
+
+        //     default:
+        //         break;
+        // }
+
+        // switch (error?.status) {
+        //     case 429:
+        //         console.log('Too many request')
+        //         return "Too many request, come back later"
+
+        //     case 422:
+        //         return
+        // }
+
 
     }
 
@@ -201,9 +193,7 @@ export default function useAuth(): UseAuthType {
 
 
         hasInitialized.current = false;
-        // // set user to null
-        // setUser(null);
-        // setAccessToken(null);
+        setUserData(null)
 
     }
 
@@ -236,29 +226,59 @@ export default function useAuth(): UseAuthType {
 
 
 
+            return (data)
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const setUserInfo = async (session: any) => {
+
+
+        try {
+            const response = await authApiManager.getProfile()
+
+            if (response.success) {
+                setUserData({
+                    id: session.user.id,
+                    first_name: response.data.first_name,
+                    last_name: response.data.last_name,
+                    email: session.user.email
+                });
+
+                return;
+            }
+            setUserData({
+                id: session.user.id,
+                email: session.user.email
+            });
 
         } catch (error) {
 
         }
+
     }
 
+    useEffect(() => {
+        console.log(userData)
+    }, [userData])
     // re direct to main page when logged in
 
     // NAVIGATION HANDLER
     useEffect(() => {
         if (window.location.href.includes('redirect')) return;
 
-        console.log(userData)
-
         if (!userData || !userData.email) {
-
             nav('/auth');
             return
         }
 
         setTimeout(() => {
 
-            nav('/auth');
+            nav('/mainpage');
 
         }, 2000)
 
@@ -272,7 +292,10 @@ export default function useAuth(): UseAuthType {
 
     return {
         supabaseClient,
-        setSupabaseClient
+        setSupabaseClient,
+        signIn,
+        signUp,
+        signOut
     }
 
 

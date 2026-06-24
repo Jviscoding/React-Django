@@ -10,24 +10,31 @@ from .Serializers.TaskSerializer import TaskSerializer
 class UserView(APIView):
     
     def get(self, request):
+                
+        try:
+            user_id = request.user["sub"]
+            user = User.objects.get(id=user_id);
+            
+            
+            
+            return Response({
+                "success": True, 
+                "message": "User Data Fetched Successfully",
+                "data": UserSerializer(user).data}, status=200)
+
+            
+        except User.DoesNotExist:
+            return Response({"success": False, "message": "User not found"}, status=404)
         
-        user_id = request.query_params.get("user_id")
+
+        # user_id = User.objects.get(pk=user_id)
+        # user_serializer = UserSerializer(user_id)
         
-        print("user_id:", user_id)
-        
-        if not user_id:
-            return Response({"error": "User not found"}, status=404)
-        
-        user_id = User.objects.get(pk=user_id)
-        user_serializer = UserSerializer(user_id)
-        
-        # filter get all tasks with this specific user_id
-        user_tasks = Task.objects.filter(user_id=user_id)
-        tasks_serializer = TaskSerializer(user_tasks, many=True)
+        # # filter get all tasks with this specific user_id
+        # user_tasks = Task.objects.filter(user_id=user_id)
+        # tasks_serializer = TaskSerializer(user_tasks, many=True)
         
         
-        return Response({"user": user_serializer.data, "tasks": tasks_serializer.data}, status=200) 
-    
     """
      
         # # filter get all tasks with this specific user_id
@@ -36,9 +43,28 @@ class UserView(APIView):
         
     """
     
-    def put(self, request):
+    def post(self, request):
+        
+        first_name = request.data.get("first_name")
+        last_name = request.data.get("last_name")
+        user_id = request.user["sub"]
         
         
-        print("DADAAd")
+        try:
+            
+            user = User.objects.get(id=user_id)
+            return Response({
+            "success": True, 
+            "message": "User Data already existed",
+            "data": UserSerializer(user).data}, status=200)
         
-        return Response({"data":"dadada"}, status=200) 
+        except User.DoesNotExist:
+             
+            user = User.objects.create(id=user_id, first_name= first_name, last_name= last_name, )
+            user.save()
+        
+
+            return Response({
+                "success": True, 
+                "message": "User Data Saved Successfully",
+                "data": UserSerializer(user).data}, status=200)

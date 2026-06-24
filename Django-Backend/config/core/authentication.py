@@ -9,7 +9,8 @@ import requests
 class SupabaseJWTAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-
+        
+        
         auth = request.headers.get("Authorization")
 
         if not auth:
@@ -29,23 +30,26 @@ class SupabaseJWTAuthentication(BaseAuthentication):
         jwks = requests.get(settings.SUPABASE_JWKS_URL).json()
 
         header = jwt.get_unverified_header(token)
+        
+        print(header)
 
         kid = header["kid"]
+        key = None
 
-        public_key = None
-
-        for key in jwks["keys"]:
-            if key["kid"] == kid:
-                public_key = jwt.algorithms.RSAAlgorithm.from_jwk(key)
+        for k in jwks["keys"]:
+            if k["kid"] == kid:
+                key = k
                 break
 
-        if public_key is None:
-            raise AuthenticationFailed("Public key not found")
+        if key is None:
+            raise Exception("Key not found")
+
+        public_key = jwt.algorithms.ECAlgorithm.from_jwk(key)  # ✔️ correct for ES256
 
         return jwt.decode(
             token,
             public_key,
-            algorithms=["RS256"],
+            algorithms=["ES256"],
             audience=settings.SUPABASE_AUDIENCE,
             issuer=settings.SUPABASE_ISSUER,
         )

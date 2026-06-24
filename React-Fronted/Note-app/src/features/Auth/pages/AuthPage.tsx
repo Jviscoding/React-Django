@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Layers, User, Lock, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
 import styles from './authPage.module.css';
+import { useUiAuthContext } from '../hooks/useUiContext';
 
 interface UserSession {
   uid: string;
@@ -13,64 +14,44 @@ interface AuthCardProps {
   triggerNotification: (message: string, type: 'success' | 'error') => void;
 }
 
-export const AuthPage: React.FC<AuthCardProps> = ({
-  onAuthSuccess,
-  triggerNotification
-}) => {
+export const AuthPage = ({ onAuthSuccess, triggerNotification }: AuthCardProps) => {
 
-
-
-
-
-
-
-  // --- Form Hooks / States ---
-  const [isSignUp, setIsSignUp] = useState<boolean>(false);
-  const [authName, setAuthName] = useState<string>("");
-  const [authEmail, setAuthEmail] = useState<string>("");
-  const [authPassword, setAuthPassword] = useState<string>("");
-  const [authError, setAuthError] = useState<string>("");
-  const [authLoading, setAuthLoading] = useState<boolean>(false);
+  const { authUiManager } = useUiAuthContext()
 
   // --- Real Form Submission handler ---
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAuthError("");
-    setAuthLoading(true);
 
-    // Mocking an async token handshake delay
-    setTimeout(() => {
-      if (authEmail === "fail@company.com") {
-        setAuthError("Authentication handshake failed. Key signature rejected.");
-        setAuthLoading(false);
-        return;
-      }
+    if (authUiManager.isSignUp) {
+      authUiManager.initSendSignUpCred();
+    } else {
+      authUiManager.initSendSignInCred();
+    }
 
-      const verifiedUser: UserSession = {
-        uid: isSignUp ? "usr-gen-" + crypto.randomUUID().slice(0, 8) : "usr-existing",
-        email: authEmail,
-        displayName: isSignUp ? authName : authEmail.split('@')[0],
-      };
+    // authUiManager.setAuthError("");
+    // authUiManager.setAuthLoading(true);
 
-      localStorage.setItem('synergy_user', JSON.stringify(verifiedUser));
-      onAuthSuccess(verifiedUser);
-      triggerNotification(isSignUp ? "Account setup completed!" : "Session authorized successfully.", "success");
-      setAuthLoading(false);
-    }, 1500);
   };
 
 
-  // --- Sandbox Fast-pass handler ---
-  const handleDemoBypass = () => {
-    const dummy: UserSession = {
-      uid: "guest-dev-" + Math.floor(Math.random() * 1000),
-      email: "developer@taskmanager.io",
-      displayName: "Demo Developer"
-    };
-    // v.setItem('synergy_user', JSON.stringify(dummy));
-    onAuthSuccess(dummy);
-    triggerNotification("Quick simulation bypass active!", "success");
-  };
+  useEffect(() => {
+
+
+    // when leave this page, reset all states
+    return () => {
+
+
+      authUiManager.setAuthError("");
+      authUiManager.setIsSuccess(false);
+      authUiManager.setAuthEmail("");
+      authUiManager.setAuthPassword("");
+      authUiManager.setAuthConfirmPass("");
+      authUiManager.setAuthName("");
+      authUiManager.setAuthLoading(false);
+      authUiManager.setIsSignUp(false);
+    }
+  }, [])
+
 
   return (
     <div className={styles.screenWrapper}>
@@ -107,20 +88,20 @@ export const AuthPage: React.FC<AuthCardProps> = ({
           <button
             type="button"
             onClick={() => {
-              setIsSignUp(false);
-              setAuthError("");
+              authUiManager.setIsSignUp(false);
+              authUiManager.setAuthError("");
             }}
-            className={`${styles.toggleButton} ${!isSignUp ? styles.toggleActive : ''}`}
+            className={`${styles.toggleButton} ${!authUiManager.isSignUp ? styles.toggleActive : ''}`}
           >
             Sign In Account
           </button>
           <button
             type="button"
             onClick={() => {
-              setIsSignUp(true);
-              setAuthError("");
+              authUiManager.setIsSignUp(true);
+              authUiManager.setAuthError("");
             }}
-            className={`${styles.toggleButton} ${isSignUp ? styles.toggleActive : ''}`}
+            className={`${styles.toggleButton} ${authUiManager.isSignUp ? styles.toggleActive : ''}`}
           >
             Create Account
           </button>
@@ -130,15 +111,15 @@ export const AuthPage: React.FC<AuthCardProps> = ({
         <form onSubmit={handleAuthSubmit} className={styles.formElement}>
 
 
-          <div className={`${styles.animateGroup} ${isSignUp ? styles.open : ""}`}>
-            <label className={styles.fieldLabel}>Full Name</label>
+          <div className={`${styles.animateGroup} ${authUiManager.isSignUp ? styles.open : ""}`}>
+            <label className={styles.fieldLabel}>Userame</label>
             <div className={styles.inputIconWrapper}>
               <User className={styles.fieldIcon} />
               <input
                 type="text"
-                required
-                value={authName}
-                onChange={(e) => setAuthName(e.target.value)}
+                required={authUiManager.isSignUp}
+                value={authUiManager.authName}
+                onChange={(e) => authUiManager.setAuthName(e.target.value)}
                 placeholder="••••••••••••"
                 className={styles.inputField}
               />
@@ -152,8 +133,8 @@ export const AuthPage: React.FC<AuthCardProps> = ({
               <input
                 type="email"
                 required
-                value={authEmail}
-                onChange={(e) => setAuthEmail(e.target.value)}
+                value={authUiManager.authEmail}
+                onChange={(e) => authUiManager.setAuthEmail(e.target.value)}
                 placeholder="name@company.com"
                 className={styles.inputField}
               />
@@ -167,23 +148,23 @@ export const AuthPage: React.FC<AuthCardProps> = ({
               <input
                 type="password"
                 required
-                value={authPassword}
-                onChange={(e) => setAuthPassword(e.target.value)}
+                value={authUiManager.authPassword}
+                onChange={(e) => authUiManager.setAuthPassword(e.target.value)}
                 placeholder="••••••••••••"
                 className={styles.inputField}
               />
             </div>
           </div>
 
-          <div className={`${styles.animateGroup} ${isSignUp ? styles.open : ""}`}>
+          <div className={`${styles.animateGroup} ${authUiManager.isSignUp ? styles.open : ""}`}>
             <label className={styles.fieldLabel}>Confirm Password</label>
             <div className={styles.inputIconWrapper}>
               <User className={styles.fieldIcon} />
               <input
-                type="text"
-                required
-                value={authName}
-                onChange={(e) => setAuthName(e.target.value)}
+                type="password"
+                required={authUiManager.isSignUp}
+                value={authUiManager.authConfirmPass}
+                onChange={(e) => authUiManager.setAuthConfirmPass(e.target.value)}
                 placeholder="••••••••••••"
                 className={styles.inputField}
               />
@@ -195,47 +176,32 @@ export const AuthPage: React.FC<AuthCardProps> = ({
 
 
           {/* Error Message Box */}
-          {authError && (
-            <div className={styles.errorBanner}>
+          {authUiManager.authError && (
+            <div className={`${styles.errorBanner} ${authUiManager.isSuccess ? styles.success : styles.error}`}>
               <AlertCircle className={styles.errorIcon} />
-              <span>{authError}</span>
+              <span>{authUiManager.authError}</span>
             </div>
           )}
 
           {/* Submit Action Button */}
           <button
             type="submit"
-            disabled={authLoading}
+            disabled={authUiManager.authLoading}
             className={styles.submitButton}
           >
-            {authLoading ? (
+            {authUiManager.authLoading ? (
               <>
                 <Loader2 className={styles.spinner} />
                 Generating session token...
               </>
             ) : (
               <>
-                <span>{isSignUp ? "Register Account" : "Access Console"}</span>
+                <span>{authUiManager.isSignUp ? "Register Account" : "Access Console"}</span>
                 <ArrowRight className={styles.buttonArrow} />
               </>
             )}
           </button>
         </form>
-
-
-
-
-        {/* Quick Demo Bypass Access Option */}
-        <div className={styles.sandboxDivider}>
-          <p className={styles.sandboxLabel}>Or Sandbox evaluation bypass</p>
-          <button
-            type="button"
-            onClick={handleDemoBypass}
-            className={styles.sandboxBypassButton}
-          >
-            Sign In with Instant Demo Account
-          </button>
-        </div>
 
       </div>
 
