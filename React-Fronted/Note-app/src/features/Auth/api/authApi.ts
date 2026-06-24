@@ -7,6 +7,8 @@ import type { SignUpType } from "../hooks/useAuth";
 
 export type AuthApiType = {
 
+    getProfile: ()=>Promise<any>    
+    setProfile: (arg0: SignUpType)=>Promise<any>
 
 
 }
@@ -89,7 +91,8 @@ export default function authApi(): AuthApiType {
 
 
     return {
-
+        setProfile,
+        getProfile
     }
 
 

@@ -246,10 +246,7 @@ export default function useAuth(): UseAuthType {
 
     // NAVIGATION HANDLER
     useEffect(() => {
-
-
         if (window.location.href.includes('redirect')) return;
-
 
         console.log(userData)
 
@@ -261,7 +258,7 @@ export default function useAuth(): UseAuthType {
 
         setTimeout(() => {
 
-            nav('/mainpage');
+            nav('/auth');
 
         }, 2000)
 
