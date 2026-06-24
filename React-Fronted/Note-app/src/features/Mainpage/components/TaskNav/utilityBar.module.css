@@ -1,23 +1,12 @@
-/* Container Base Configurations */
 .container {
-  --bg-primary: #ffffff;
-  --bg-input: #f8fafc;
-  --border-color: #e2e8f0;
-  --text-main: #334155;
-  --text-meta: #94a3b8;
-  --badge-bg: #f1f5f9;
-  --badge-text: #334155;
-  --accent-color: #4f46e5;
-
-  background-color: var(--bg-primary);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
   padding: 16px;
-  border: 1px solid var(--border-color);
   border-radius: 16px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  font-family: system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
 
@@ -27,17 +16,6 @@
   }
 }
 
-/* Dark Mode Color Overrides */
-.container.dark {
-  --bg-primary: #0f172a;
-  --bg-input: #020617;
-  --border-color: #1e293b;
-  --text-main: #cbd5e1;
-  --text-meta: #64748b;
-  --badge-bg: #1e293b;
-  --badge-text: #cbd5e1;
-  --accent-color: #818cf8;
-}
 
 /* Row Formats */
 .topRow {
@@ -57,7 +35,7 @@
 
 .bottomRow {
   padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -76,7 +54,7 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-meta);
+  color: var(--text);
   pointer-events: none;
 }
 
@@ -85,17 +63,17 @@
   padding: 10px 44px 10px 44px;
   font-size: 14px;
   border-radius: 12px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-input);
-  color: var(--text-main);
+  background-color: var(--code-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
 }
 
 .searchInput:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
 }
 
 .clearSearchButton {
@@ -105,7 +83,7 @@
   transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: var(--text-meta);
+  color: var(--text);
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -113,7 +91,7 @@
 }
 
 .clearSearchButton:hover {
-  color: var(--text-main);
+  color: var(--text-h);
 }
 
 /* Active Filtering Elements */
@@ -126,7 +104,7 @@
 }
 
 .metaLabel {
-  color: var(--text-meta);
+  color: var(--text);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -135,15 +113,16 @@
 .filterBadge {
   padding: 4px 10px;
   border-radius: 8px;
-  background-color: var(--badge-bg);
-  color: var(--badge-text);
+  background-color: var(--code-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
   font-weight: 600;
 }
 
 .clearAllLinkButton {
   background: transparent;
   border: none;
-  color: var(--accent-color);
+  color: var(--accent);
   font-weight: 700;
   cursor: pointer;
   padding: 0;
@@ -171,7 +150,7 @@
 .controlLabel {
   font-size: 12px;
   font-weight: 700;
-  color: var(--text-meta);
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -181,9 +160,9 @@
 .selectDropdown {
   font-size: 12px;
   font-weight: 600;
-  background-color: var(--bg-input);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
+  background-color: var(--code-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
   padding: 6px 10px;
   border-radius: 8px;
   outline: none;
@@ -192,6 +171,6 @@
 }
 
 .selectDropdown:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 1px #4f46e5;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }

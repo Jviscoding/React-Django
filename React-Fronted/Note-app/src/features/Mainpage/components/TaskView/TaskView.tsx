@@ -9,6 +9,7 @@ import {
   Trash2 
 } from 'lucide-react';
 import styles from './taskView.module.css';
+import { v4 as uuidv4 } from "uuid";
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -53,10 +54,11 @@ const defaultCategoryDetails = (categoryId: string): CategoryDetails => ({
 export const TaskView = ({
   initialTasks = [],
   initialViewMode = 'board',
-  darkMode = false,
+  darkMode = true,
   getCategoryDetails = defaultCategoryDetails,
 }: TaskViewProps) => {
   
+
   // --- Local States ---
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [viewMode, setViewMode] = useState<'board' | 'list'>(initialViewMode);
@@ -69,7 +71,7 @@ export const TaskView = ({
     // Add your localized prompt/modal logic here. 
     // Example placeholder adding a generic task:
     const newTask: Task = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       title: 'New Dynamic Task',
       description: 'Created using local component state.',
       status: 'Pending',
@@ -156,12 +158,11 @@ export const TaskView = ({
     }
   };
 
-  const themeClass = darkMode ? styles.dark : '';
 
   // 1. EMPTY STATE VIEW
   if (tasks.length === 0) {
     return (
-      <div className={`${styles.emptyCard} ${themeClass}`}>
+      <div className={`${styles.emptyCard}`}>
         <div className={styles.emptyIconWrapper}>
           <BrainCircuit size={28} />
         </div>
@@ -181,7 +182,7 @@ export const TaskView = ({
     const statuses: Task['status'][] = ['Pending', 'In Progress', 'Completed'];
     
     return (
-      <div className={`${styles.boardGrid} ${themeClass}`}>
+      <div className={`${styles.boardGrid}`}>
         {/* Quick View Switcher Ribbon added for contextual ease */}
         <div style={{gridColumn: '1 / -1', marginBottom: '10px'}}>
           <button onClick={() => setViewMode('list')} className={styles.emptyButton} style={{padding: '4px 12px'}}>
@@ -335,7 +336,7 @@ export const TaskView = ({
 
   // 3. LIST VIEW
   return (
-    <div className={`${styles.listContainerTableCard} ${themeClass}`}>
+    <div className={`${styles.listContainerTableCard}`}>
       <div className={styles.tableElementFakeWrapper}>
         
         {/* Quick View Switcher Ribbon */}

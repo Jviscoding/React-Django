@@ -3,16 +3,22 @@ import TaskApi from '../api/TaskApi';
 import styles from './mainpage.module.css'
 import { MeterContainer } from '../components/Meter/MeterContainer';
 import KpiContainer from '../components/Kpi/KpiContainer';
-import { StatsCard } from '../components/Kpi/KpiCards';
+import { iconStyles, StatsCard } from '../components/Kpi/KpiCards';
 import { CompletionCard } from '../components/Meter/CompletionRate';
 import { UtilityBar } from '../components/TaskNav/UtilityBar';
 import { TaskView } from '../components/TaskView/TaskView';
 import { TaskModal, type Task } from '../components/TaskModal';
+import { AlertCircle, CheckCircle, Clock, Folder } from 'lucide-react';
 
 export default function Mainpage() {
 
     const getData = TaskApi();
 
+
+    document.documentElement.setAttribute(
+        "data-theme",
+        "dark"
+    );
     useEffect(() => {
 
         const fetchData = async () => {
@@ -33,16 +39,15 @@ export default function Mainpage() {
         <div className={styles.mainWrapper}>
 
             <KpiContainer>
-                <StatsCard title='Active Tasks' total={4} subMessage='total loaded'></StatsCard>
-                <StatsCard title='Completed' total={4} subMessage='archived'></StatsCard>
-                <StatsCard title='In Progress' total={4} subMessage='underway'></StatsCard>
-                <StatsCard title='pending' total={4} subMessage='in queue'></StatsCard>
+                <StatsCard title='Active Tasks' total={4} subMessage='total loaded' icon={Folder} iconStyle={iconStyles[0]}></StatsCard>
+                <StatsCard title='Completed' total={4} subMessage='archived' icon={Clock} iconStyle={iconStyles[1]}></StatsCard>
+                <StatsCard title='In Progress' total={4} subMessage='underway' icon={CheckCircle} iconStyle={iconStyles[2]}></StatsCard>
+                <StatsCard title='pending' total={4} subMessage='in queue' icon={AlertCircle} iconStyle={iconStyles[3]}></StatsCard>
                 <CompletionCard stats={{
                     completionRate: 100
                 }} />
 
             </KpiContainer>
-            <MeterContainer />
             <UtilityBar />
             <TaskView />
 

@@ -1,25 +1,49 @@
-
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* --- LIGHT MODE: SLATE DEVELOPER PALETTE --- */
+  --text: #475569;
+  /* Slate-600: Readable paragraph & label text */
+  --text-h: #0f172a;
+  /* Slate-900: Deep crisp header & primary titles */
+  --bg: #f8fafc;
+  /* Slate-50: Clean, light app workspace canvas */
+  --border: #e2e8f0;
+  /* Slate-200: Elegant borders for cards, boards, & fields */
+  --code-bg: #f1f5f9;
+  /* Slate-100: Dedicated background for playground code blocks */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Brand Accent (Signature SynergyTask Indigo/Purple) */
+  --accent: #4f46e5;
 
+  --hover:#847efb;
+  /* Indigo-600: Buttons, active states, and navigation highlights */
+  --accent-bg: rgba(79, 70, 229, 0.08);
+  /* Soft Indigo Tint: Selected tabs & background highlights */
+  --accent-border: rgba(79, 70, 229, 0.4);
+  /* Focused element outlines & interactive dropzones */
+
+  /* System Utilities & Surfaces */
+  --social-bg: rgba(226, 232, 240, 0.4);
+  /* Transparent secondary actions & list filters */
+  --shadow: rgba(15, 23, 42, 0.08) 0px 10px 15px -3px, rgba(15, 23, 42, 0.04) 0px 4px 6px -2px;
+
+  /* Status Colors (Extracted from Sprint Badges) */
+  --status-pending: #d97706;
+  /* Amber-600 */
+  --status-progress: #4f46e5;
+  /* Indigo-600 */
+  --status-completed: #059669;
+  /* Emerald-600 */
+  --status-high: #e11d48;
+  /* Rose-600 */
+
+  /* --- TYPOGRAPHY SPECIFICATION --- */
+  --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Global Core Engine Settings */
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
@@ -35,26 +59,42 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+[data-theme="dark"] {
+  /* --- DARK MODE: SLATE OBSIDIAN PALETTE --- */
+  --text: #94a3b8;
+  /* Slate-400: Clear muted typography on dark surfaces */
+  --text-h: #f8fafc;
+  /* Slate-50: Crisp, near-white high-contrast text */
+  --bg: #020617;
+  /* Slate-950: Extreme deep workspace environment */
+  --border: #1e293b;
+  /* Slate-800: Gridlines separating columns and tabs */
+  --code-bg: #0f172a;
+  /* Slate-900: Server console & terminal response blocks */
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+  /* Dark Mode Indigo Accent Adjustments */
+  --accent: #6366f1;
+  /* Indigo-500: Vibrant radiant branding for dark UI layers */
+  --accent-bg: rgba(99, 102, 241, 0.15);
+  /* Enhanced purple aura for drag drop indicators */
+  --accent-border: rgba(99, 102, 241, 0.5);
+  /* Glowing state outlines for fields and tasks */
+
+  /* Structural Dark Surfaces & Shadows */
+  --social-bg: rgba(30, 41, 59, 0.5);
+  /* Slate-800/50: Secondary panels & action tiles */
+  --shadow: rgba(0, 0, 0, 0.6) 0px 10px 15px -3px, rgba(0, 0, 0, 0.4) 0px 4px 6px -2px;
+
+  /* Dark Mode Status Adjustments */
+  --status-pending: #f59e0b;
+  /* Amber-500 */
+  --status-progress: #6366f1;
+  /* Indigo-500 */
+  --status-completed: #10b981;
+  /* Emerald-500 */
+  --status-high: #f43f5e;
+  /* Rose-500 */
 }
-
 
 * {
   margin: 0;

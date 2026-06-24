@@ -1,41 +1,28 @@
-/* Card Outer Layout */
 .card {
-  --bg-color: #ffffff;
-  --border-color: #e2e8f0;
-  --text-label: #94a3b8;
-  --text-percentage: #4f46e5;
-  --track-bg: #f1f5f9;
+  grid-column: span 2 / span 2;
 
-  grid-column: span 2 / span 2; /* col-span-2 fallback layout */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px; /* p-5 */
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 16px; /* rounded-2xl */
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-  font-family: system-ui, -apple-system, sans-serif;
+
+  padding: 20px;
+
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  box-shadow: var(--shadow);
+
   box-sizing: border-box;
 }
 
-/* Optional responsive grid fallback if container query classes aren't wrapping this */
 @media (min-width: 1024px) {
   .card {
-    grid-column: span 1 / span 1; /* lg:col-span-1 */
+    grid-column: span 1 / span 1;
   }
 }
 
-/* Dark Theme Overrides */
-.card.dark {
-  --bg-color: #0f172a;
-  --border-color: #1e293b;
-  --text-label: #64748b;
-  --text-percentage: #818cf8; /* indigo-400 tint */
-  --track-bg: #1e293b;
-}
-
-/* Interior Core Elements */
+/* Header */
 .header {
   display: flex;
   align-items: center;
@@ -43,47 +30,62 @@
 }
 
 .label {
-  font-size: 12px; /* text-xs */
+  font-size: 12px;
   font-weight: 700;
-  color: var(--text-label);
-  letter-spacing: 0.05em; /* tracking-wider */
+
+  color: var(--text);
+
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .trendIcon {
-  color: #6366f1; /* text-indigo-500 */
+  color: var(--accent);
 }
 
+/* Body */
 .contentBody {
-  margin-top: 8px; /* mt-2 */
+  margin-top: 8px;
 }
 
 .valueContainer {
   display: flex;
   align-items: baseline;
-  gap: 4px; /* gap-1 */
+  gap: 4px;
 }
 
 .percentageText {
-  font-size: 30px; /* text-3xl */
-  font-weight: 800; /* font-extrabold */
-  color: var(--text-percentage);
+  font-size: 30px;
+  font-weight: 800;
+
+  color: var(--accent);
+
   line-height: 1;
 }
 
-/* Progress Bar Components */
+/* Progress Bar */
 .progressTrack {
   width: 100%;
-  background-color: var(--track-bg);
-  height: 8px; /* h-2 */
-  border-radius: 9999px; /* rounded-full */
-  margin-top: 8px; /* mt-2 */
+  height: 8px;
+
+  margin-top: 8px;
+
+  background-color: var(--code-bg);
+
+  border-radius: 9999px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(to right, #6366f1, #a855f7); /* gradient to-r indigo-500 -> purple-500 */
+
+  background: linear-gradient(
+    to right,
+    var(--accent)30%,
+    color-mix(in srgb, var(--accent) 30%, #ffffff)
+  );
+
   border-radius: 9999px;
-  transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1); /* transition-all duration-500 */
+
+  transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }

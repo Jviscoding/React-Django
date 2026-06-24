@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Search, X, AlertCircle, ArrowUpDown } from 'lucide-react';
-import styles from './UtilityBar.module.css';
+import styles from './utilityBar.module.css';
 
-interface UtilityBarProps {
-  darkMode?: boolean;
-}
 
-export const UtilityBar: React.FC<UtilityBarProps> = ({ darkMode = false }) => {
+
+export const UtilityBar = () => {
   // --- Internal State Initializations ---
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('All');
@@ -20,7 +18,7 @@ export const UtilityBar: React.FC<UtilityBarProps> = ({ darkMode = false }) => {
   const getCategoryDetails = (id: string) => {
     // Basic fallback dictionary for visualization
     const mockCategories: Record<string, { name: string }> = {
-      '1': { name: 'Work' },
+      '1': { name: 'Work' }, 
       '2': { name: 'Personal' },
       '3': { name: 'Shopping' },
     };
@@ -34,7 +32,7 @@ export const UtilityBar: React.FC<UtilityBarProps> = ({ darkMode = false }) => {
   };
 
   return (
-    <section className={`${styles.container} ${darkMode ? styles.dark : ''}`}>
+    <section className={`${styles.container}`}>
       <div className={styles.topRow}>
         
         {/* Search Input Bar */}
