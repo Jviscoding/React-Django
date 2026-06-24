@@ -13,13 +13,13 @@ interface AuthCardProps {
   triggerNotification: (message: string, type: 'success' | 'error') => void;
 }
 
-export const AuthPage: React.FC<AuthCardProps> = ({ 
-  onAuthSuccess, 
-  triggerNotification 
+export const AuthPage: React.FC<AuthCardProps> = ({
+  onAuthSuccess,
+  triggerNotification
 }) => {
-  
 
-  
+
+
 
 
 
@@ -59,7 +59,7 @@ export const AuthPage: React.FC<AuthCardProps> = ({
     }, 1500);
   };
 
-  
+
   // --- Sandbox Fast-pass handler ---
   const handleDemoBypass = () => {
     const dummy: UserSession = {
@@ -76,7 +76,7 @@ export const AuthPage: React.FC<AuthCardProps> = ({
     <div className={styles.screenWrapper}>
       {/* Decorative Grid Background */}
       <div className={styles.decorativeGrid}></div>
-      
+
       {/* Glow Effects */}
       <div className={styles.glowIndigo}></div>
       <div className={styles.glowPurple}></div>
@@ -98,7 +98,7 @@ export const AuthPage: React.FC<AuthCardProps> = ({
 
       {/* Authentication Card Container */}
       <div className={styles.authCard}>
-        
+
 
 
 
@@ -130,22 +130,20 @@ export const AuthPage: React.FC<AuthCardProps> = ({
         <form onSubmit={handleAuthSubmit} className={styles.formElement}>
 
 
-          {isSignUp && (
-            <div className={`${styles.inputGroup} ${styles.animateFade}`}>
-              <label className={styles.fieldLabel}>Full Name</label>
-              <div className={styles.inputIconWrapper}>
-                <User className={styles.fieldIcon} />
-                <input
-                  type="text"
-                  required
-                  value={authName}
-                  onChange={(e) => setAuthName(e.target.value)}
-                  placeholder="e.g. Alexis Dev"
-                  className={styles.inputField}
-                />
-              </div>
+          <div className={`${styles.animateGroup} ${isSignUp ? styles.open : ""}`}>
+            <label className={styles.fieldLabel}>Full Name</label>
+            <div className={styles.inputIconWrapper}>
+              <User className={styles.fieldIcon} />
+              <input
+                type="text"
+                required
+                value={authName}
+                onChange={(e) => setAuthName(e.target.value)}
+                placeholder="••••••••••••"
+                className={styles.inputField}
+              />
             </div>
-          )}
+          </div>
 
           <div className={styles.inputGroup}>
             <label className={styles.fieldLabel}>Email Address</label>
@@ -177,22 +175,21 @@ export const AuthPage: React.FC<AuthCardProps> = ({
             </div>
           </div>
 
-          {isSignUp && (
-            <div className={`${styles.inputGroup} ${styles.animateFade}`}>
-              <label className={styles.fieldLabel}>Full Name</label>
-              <div className={styles.inputIconWrapper}>
-                <User className={styles.fieldIcon} />
-                <input
-                  type="text"
-                  required
-                  value={authName}
-                  onChange={(e) => setAuthName(e.target.value)}
-                  placeholder="e.g. Alexis Dev"
-                  className={styles.inputField}
-                />
-              </div>
+          <div className={`${styles.animateGroup} ${isSignUp ? styles.open : ""}`}>
+            <label className={styles.fieldLabel}>Confirm Password</label>
+            <div className={styles.inputIconWrapper}>
+              <User className={styles.fieldIcon} />
+              <input
+                type="text"
+                required
+                value={authName}
+                onChange={(e) => setAuthName(e.target.value)}
+                placeholder="••••••••••••"
+                className={styles.inputField}
+              />
             </div>
-          )}
+          </div>
+
 
 
 
