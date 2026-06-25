@@ -1,4 +1,3 @@
-
 /* ==========================================
    1. EMPTY ILLUSTRATION STATE
    ========================================== */
@@ -11,7 +10,7 @@
   max-width: 32rem;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +21,7 @@
   height: 64px;
   background-color: var(--accent-bg);
   color: var(--accent);
+  border: 1px solid var(--accent-border);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -29,8 +29,22 @@
   margin-bottom: 16px;
 }
 
-.emptyTitle { font-size: 18px; font-weight: 700; color: var(--text-h); margin: 0; }
-.emptyDescription { font-size: 14px; color: var(--text); margin-top: 4px; margin-bottom: 0; max-width: 24rem; text-align: center; line-height: 1.5; }
+.emptyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+}
+
+.emptyDescription {
+  font-size: 14px;
+  color: var(--text);
+  margin-top: 4px;
+  margin-bottom: 0;
+  max-width: 24rem;
+  text-align: center;
+  line-height: 1.5;
+}
 
 .emptyButton {
   margin-top: 24px;
@@ -44,9 +58,10 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
+
 .emptyButton:hover {
   background-color: var(--hover);
- }
+}
 
 
 /* ==========================================
@@ -59,11 +74,13 @@
 }
 
 @media (min-width: 968px) {
-  .boardGrid { grid-template-columns: repeat(3, minmax(100px, 1fr)); }
+  .boardGrid {
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+  }
 }
 
 .boardColumn {
-  background-color: rgba(241, 245, 249, 0.6);
+  background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 16px;
@@ -78,23 +95,46 @@
   justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-b: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
-.columnHeaderTitleGroup { display: flex; align-items: center; gap: 8px; }
+.columnHeaderTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-.statusDot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.dotGreen { background-color: #10b981; }
-.dotBlue { background-color: #0ea5e9; }
-.dotGray { background-color: #94a3b8; }
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-.columnTitleText { font-weight: 700; font-size: 14px; color: var(--text-h); margin: 0; }
+.dotGreen {
+  background-color: var(--status-completed);
+}
+
+.dotBlue {
+  background-color: var(--status-progress);
+}
+
+.dotGray {
+  background-color: var(--text);
+}
+
+.columnTitleText {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-h);
+  margin: 0;
+}
 
 .columnCounterCount {
   font-size: 12px;
   font-weight: 700;
-  background-color: #e2e8f0;
-  color: #475569;
+  background-color: var(--code-bg);
+  color: var(--text);
   padding: 2px 8px;
   border-radius: 9999px;
 }
@@ -111,7 +151,12 @@
   text-align: center;
   color: var(--text);
 }
-.columnDropZonePlaceholder p { margin: 0; font-size: 12px; font-weight: 600; }
+
+.columnDropZonePlaceholder p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
 
 .columnCardsScrollableArea {
   display: flex;
@@ -128,33 +173,111 @@
   border: 1px solid var(--border);
   padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   cursor: grab;
   position: relative;
   transition: all 0.2s ease;
 }
-.taskCard:active { cursor: grabbing; }
+
+.taskCard:active {
+  cursor: grabbing;
+}
+
 .taskCard:hover {
   border-color: var(--accent-border);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
-.cardBadgesRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-.cardContentLayout { display: flex; flex-direction: column; gap: 6px; }
-.cardHeadingTitle { font-weight: 700; font-size: 14px; color: var(--text-h); margin: 0; line-height: 1.4; }
-.cardParagraphDescription { font-size: 12px; color: var(--text); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+.cardBadgesRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.cardContentLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardHeadingTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-h);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cardParagraphDescription {
+  font-size: 12px;
+  color: var(--text);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
 
 /* Subtasks Trackers Area */
-.cardChecklistContainer { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
-.checklistMetricsMetaText { display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 700; color: var(--text); }
-.checklistTitleLabel { display: flex; align-items: center; gap: 4px; }
+.cardChecklistContainer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-.cardProgressTrackBackground { width: 100%; background-color: var(--code-bg); height: 6px; border-radius: 9999px; overflow: hidden; }
-.cardProgressFillIndicator { background-color: #6366f1; height: 100%; border-radius: 9999px; transition: width 0.3s ease; }
+.checklistMetricsMetaText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+}
 
-.boardChecklistInteractiveList { padding-top: 6px; display: flex; flex-direction: column; gap: 4px; }
-.checklistRowCheckboxLabel { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text); cursor: pointer; }
-.checklistRowCheckboxLabel:hover { color: var(--text-h); }
+.checklistTitleLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardProgressTrackBackground {
+  width: 100%;
+  background-color: var(--code-bg);
+  height: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.cardProgressFillIndicator {
+  background-color: var(--accent);
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.boardChecklistInteractiveList {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.checklistRowCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.checklistRowCheckboxLabel:hover {
+  color: var(--text-h);
+}
 
 .nativeInputElementCheckbox {
   appearance: none;
@@ -168,13 +291,24 @@
   cursor: pointer;
   margin: 0;
 }
-.nativeInputElementCheckbox:checked { background-color: #4f46e5; border-color: #4f46e5; }
+
+.nativeInputElementCheckbox:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
 .nativeInputElementCheckbox:checked::before {
-  content: ""; width: 6px; height: 6px; background-color: white;
+  content: "";
+  width: 6px;
+  height: 6px;
+  background-color: white;
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
-.lineThroughColorMuted { text-decoration: line-through; color: var(--text); }
+.lineThroughColorMuted {
+  text-decoration: line-through;
+  color: var(--text);
+}
 
 /* Card Footers Meta Grouping */
 .cardFooterContainer {
@@ -185,19 +319,56 @@
   align-items: center;
   justify-content: space-between;
 }
-.cardFooterDateGroup { display: flex; align-items: center; gap: 4px; color: var(--text); font-size: 10px; font-weight: 500; }
 
-.cardActionsGroup { display: flex; align-items: center; gap: 6px; opacity: 0.6; transition: opacity 0.2s; }
-.taskCard:hover .cardActionsGroup { opacity: 1; }
+.cardFooterDateGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.cardActionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.taskCard:hover .cardActionsGroup {
+  opacity: 1;
+}
 
 .actionButtonCircleIcon {
-  padding: 6px; border-radius: 8px; border: 1px solid var(--border);
-  background: transparent; color: var(--text); cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
-.actionButtonCircleIcon:hover { color: #4f46e5; border-color: var(--accent-border); background-color: var(--code-bg); }
-.actionCircleCheckedActive { color: #10b981 !important; border-color: #a7f3d0 !important; }
-.dangerHoverColorStyles:hover { color: #ef4444 !important; border-color: #fee2e2 !important; }
+
+.actionButtonCircleIcon:hover {
+  color: #4f46e5;
+  border-color: var(--accent-border);
+  background-color: var(--code-bg);
+}
+
+.actionCircleCheckedActive {
+  color: #10b981 !important;
+  border-color: #a7f3d0 !important;
+}
+
+.dangerHoverColorStyles:hover {
+  color: #ef4444 !important;
+  border-color: #fee2e2 !important;
+}
 
 /* ==========================================
    3. FLAT LIST LINEAR VIEWS
@@ -206,17 +377,29 @@
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   overflow: hidden;
   animation: fadeIn 300ms ease-out forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.tableElementFakeWrapper { width: 100%; overflow-x: auto; display: flex; flex-direction: column; }
+.tableElementFakeWrapper {
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Flexbox Explicit CSS Grid Column Matrix */
 .tableHeaderColumnsGridRow {
@@ -233,11 +416,19 @@
 }
 
 @media (min-width: 768px) {
-  .tableHeaderColumnsGridRow { display: grid; }
+  .tableHeaderColumnsGridRow {
+    display: grid;
+  }
 }
 
-.tableBodyDivideContainers { display: flex; flex-direction: column; }
-.tableBodyDivideContainers > div + div { border-top: 1px solid var(--code-bg); }
+.tableBodyDivideContainers {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableBodyDivideContainers>div+div {
+  border-top: 1px solid var(--code-bg);
+}
 
 .tableRowInteractiveItemGrid {
   display: grid;
@@ -246,59 +437,235 @@
   padding: 18px 24px;
   align-items: center;
   transition: background-color 0.2s;
+
 }
 
 @media (min-width: 768px) {
-  .tableRowInteractiveItemGrid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .tableRowInteractiveItemGrid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
 }
 
-.tableRowInteractiveItemGrid:hover { background-color: rgba(248, 250, 252, 0.6); }
+.tableRowInteractiveItemGrid:hover {
+  background-color: color-mix(in srgb,
+      var(--code-bg) 60%,
+      transparent);
+}
 
 /* Column Definitions mapping Grid-12 alignment sizes */
-.colSpan5 { grid-column: span 5 / span 5; }
-.colSpan2 { grid-column: span 2 / span 2; }
-.colSpan1 { grid-column: span 1 / span 1; }
+.colSpan5 {
+  grid-column: span 5 / span 5;
+}
 
-.colSpan5FlexibleRowAlignment { display: flex; align-items: flex-start; gap: 12px; }
-@media (min-width: 768px) { .colSpan5FlexibleRowAlignment { grid-column: span 5 / span 5; } }
+.colSpan2 {
+  grid-column: span 2 / span 2;
+}
 
-.colSpan2FlexibleRowAlignment { display: flex; align-items: center; }
-@media (min-width: 768px) { .colSpan2FlexibleRowAlignment { grid-column: span 2 / span 2; } }
+.colSpan1 {
+  grid-column: span 1 / span 1;
+}
 
-.colSpan2VerticalFlexStackMobileAlign { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
-@media (min-width: 768px) { .colSpan2VerticalFlexStackMobileAlign { grid-column: span 2 / span 2; } }
+.colSpan5FlexibleRowAlignment {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
 
-.colSpan1FlexibleRowAlignment { display: flex; align-items: center; }
-@media (min-width: 768px) { .colSpan1FlexibleRowAlignment { grid-column: span 1 / span 1; } }
+@media (min-width: 768px) {
+  .colSpan5FlexibleRowAlignment {
+    grid-column: span 5 / span 5;
+  }
+}
 
-.textAlignmentRight { text-align: right; }
-.justifyFlexEndHorizontalRowItems { justify-content: flex-end; gap: 6px; }
+.colSpan2FlexibleRowAlignment {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .colSpan2FlexibleRowAlignment {
+    grid-column: span 2 / span 2;
+  }
+}
+
+.colSpan2VerticalFlexStackMobileAlign {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .colSpan2VerticalFlexStackMobileAlign {
+    grid-column: span 2 / span 2;
+  }
+}
+
+.colSpan1FlexibleRowAlignment {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .colSpan1FlexibleRowAlignment {
+    grid-column: span 1 / span 1;
+  }
+}
+
+.textAlignmentRight {
+  text-align: right;
+}
+
+.justifyFlexEndHorizontalRowItems {
+  justify-content: flex-end;
+  gap: 6px;
+}
 
 /* Content Items Internal styling blueprints */
 .rowStatusTriggerActionButton {
-  margin-top: 2px; padding: 4px; background: transparent; border: none;
-  color: var(--border); cursor: pointer; display: inline-flex; transition: color 0.2s;
+  margin-top: 2px;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  color: var(--border);
+  cursor: pointer;
+  display: inline-flex;
+  transition: color 0.2s;
 }
-.rowStatusTriggerActionButton:hover { color: var(--text); }
-.rowStatusCheckedColor { color: #10b981 !important; }
 
-.textContainerTruncatedLayout { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.listRowItemTitle { font-weight: 700; font-size: 14px; color: var(--text-h); margin: 0; }
-.listRowItemDescriptionTruncatedText { font-size: 12px; color: var(--text); margin-top: 4px; margin-bottom: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rowStatusTriggerActionButton:hover {
+  color: var(--text);
+}
+
+.rowStatusCheckedColor {
+  color: #10b981 !important;
+}
+
+.textContainerTruncatedLayout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.listRowItemTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-h);
+  margin: 0;
+}
+
+.listRowItemDescriptionTruncatedText {
+  font-size: 12px;
+  color: var(--text);
+  margin-top: 4px;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* Inline checklist layout settings specifically inside List View Mode rows */
-.listModeInlineChecklistRootContainer { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; padding-left: 4px; }
-.listInlineChecklistHeaderMeta { font-size: 10px; font-weight: 700; color: var(--text); text-transform: uppercase; }
-.listInlineChecklistFlexibleFlexWrapTrack { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; }
-.listInlineSubtaskRowItemCheckboxLabel { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); cursor: pointer; }
+.listModeInlineChecklistRootContainer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 4px;
+}
 
-.opacityMutedStrikethrough { text-decoration: line-through; opacity: 0.6; }
-.listRowDateTimeFooterLabel { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); }
+.listInlineChecklistHeaderMeta {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.listInlineChecklistFlexibleFlexWrapTrack {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 4px;
+}
+
+.listInlineSubtaskRowItemCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.opacityMutedStrikethrough {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.listRowDateTimeFooterLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text);
+}
 
 .listRowActionButtonCircle {
-  padding: 6px; border-radius: 8px; border: 1px solid var(--border);
-  background: transparent; color: var(--text); cursor: pointer;
-  display: inline-flex; transition: all 0.2s;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  transition: all 0.2s;
 }
-.listRowActionButtonCircle:hover { color: #4f46e5; border-color: var(--accent-border); background-color: var(--code-bg); }
-.listRowDangerButtonHover:hover { color: #ef4444 !important; border-color: #fee2e2 !important; }
+
+.listRowActionButtonCircle:hover {
+  color: #4f46e5;
+  border-color: var(--accent-border);
+  background-color: var(--code-bg);
+}
+
+.listRowDangerButtonHover:hover {
+  color: #ef4444 !important;
+  border-color: #fee2e2 !important;
+}
+
+
+/* priority  */
+.priorityHigh,
+.priorityMedium,
+.priorityLow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border: 1px solid transparent;
+}
+
+/* High Priority */
+.priorityHigh {
+  color: var(--status-high);
+  background-color: color-mix(in srgb, var(--status-high) 12%, transparent);
+  border-color: color-mix(in srgb, var(--status-high) 25%, transparent);
+}
+
+/* Medium Priority */
+.priorityMedium {
+  color: var(--status-pending);
+  background-color: color-mix(in srgb, var(--status-pending) 12%, transparent);
+  border-color: color-mix(in srgb, var(--status-pending) 25%, transparent);
+}
+
+/* Low Priority */
+.priorityLow {
+  color: var(--status-completed);
+  background-color: color-mix(in srgb, var(--status-completed) 12%, transparent);
+  border-color: color-mix(in srgb, var(--status-completed) 25%, transparent);
+}

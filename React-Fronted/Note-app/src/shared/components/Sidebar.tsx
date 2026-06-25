@@ -79,14 +79,7 @@ const Sidebar = () => {
 
     return (
         <aside className={`${styles.navBarContainer} ${isNavBarHidden ? styles.minNavBar : ""}`}>
-            <div className={styles.siteNameContainer}>
-                <div className={`${styles.titleContainer} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
-                    <p>Stockora</p>
-
-                </div>
-                {/* className={iconList["menu_horizontal"]} */}
-                <i onClick={() => { toggleNavBar() }} > </i>
-            </div>
+         
             <div className={styles.linkContainer}>
                 {navItems.map((item) => {
                     const Icon = item.icon;
@@ -135,3 +128,16 @@ const Sidebar = () => {
 
 
 export default Sidebar;
+
+
+
+/**
+ 
+    <div className={styles.siteNameContainer}>
+                <div className={`${styles.titleContainer} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
+                    <p>Stockora</p>
+
+                </div>
+                <i onClick={() => { toggleNavBar() }} > </i>
+            </div>
+ */

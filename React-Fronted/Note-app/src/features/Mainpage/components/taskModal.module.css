@@ -22,31 +22,28 @@
 
 .modalCard {
   position: relative;
-  background-color: #ffffff;
   width: 100%;
-  max-width: 32rem; /* max-w-lg */
+  max-width: 32rem;
+  /* max-w-lg */
   border-radius: 1rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
   /* Modal Animation Simulation */
   animation: modalAnimateIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.dark .modalCard {
-  background-color: #0f172a;
-  border-color: #1e293b;
-}
 
 @keyframes modalAnimateIn {
   from {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -56,26 +53,22 @@
 /* --- Header Section --- */
 .modalHeader {
   padding: 1.125rem 1.5rem;
-  border-b: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
 }
 
-.dark .modalHeader {
-  border-color: #1e293b;
-}
+
 
 .modalHeaderTitle {
   font-weight: 700;
-  font-size: 1rem;
-  color: #0f172a;
+  font-size: 0.75rem;
+  color: var(--text-h);
 }
 
-.dark .modalHeaderTitle {
-  color: #ffffff;
-}
+
 
 .closeHeaderButton {
   color: #94a3b8;
@@ -93,10 +86,29 @@
   color: #e2e8f0;
 }
 
-/* --- Form Framework Elements --- */
 .formScrollableContainer {
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: 10px;
+  scrollbar-color: var(--text) transparent;
+}
+
+.formScrollableContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.formScrollableContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.formScrollableContainer::-webkit-scrollbar-thumb {
+  background: var(--text);
+  opacity: 0.4;
+  border-radius: 999px;
+}
+
+.formScrollableContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
 
 .formWrapperSpace {
@@ -120,9 +132,9 @@
 
 .formLabelBase {
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.60rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--text-h);
   letter-spacing: 0.05em;
 }
 
@@ -138,42 +150,34 @@
 .inputElementText {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  color: #0f172a;
+  border: 1px solid var(--border);
+  background-color: var(--code-bg);
+  color: var(--text-h);
+  border-radius: 0.50rem;
+  font-size: 0.75rem;
   transition: all 150ms ease;
 }
 
-.dark .inputElementText {
-  border-color: #1e293b;
-  background-color: #020617;
-  color: #ffffff;
-}
 
-.inputElementText:focus, .textareaElement:focus {
+
+.inputElementText:focus,
+.textareaElement:focus {
   outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px #4f46e5;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
 }
 
 .textareaElement {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  border: 1px solid var(--border);
+  background-color: var(--code-bg);
   border-radius: 0.75rem;
-  font-size: 0.875rem;
-  color: #0f172a;
-  resize: none;
+  font-size: 0.75rem;
+  color: var(--text-h);
+  resize: vertical;
   transition: all 150ms ease;
-}
-
-.dark .textareaElement {
-  border-color: #1e293b;
-  background-color: #020617;
-  color: #ffffff;
+  min-height: 50px;
 }
 
 .responsiveThreeColumnGrid {
@@ -184,19 +188,19 @@
 
 @media (min-width: 640px) {
   .responsiveThreeColumnGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .selectInputElement {
   width: 100%;
   padding: 0.625rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  border: 1px solid var(--border);
+  background-color: var(--code-bg);
   border-radius: 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-h);
 }
 
 .dark .selectInputElement {
@@ -212,13 +216,13 @@
 
 /* --- Features (AI Feature Ribbon & Checklists) --- */
 .aiGenerateButton {
-  background-color: #eef2ff;
-  color: #4f46e5;
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.625rem;
   border-radius: 0.5rem;
-  border: 1px solid #e0e7ff;
+  background-color: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -235,19 +239,19 @@
   cursor: not-allowed;
 }
 
-.dark .aiGenerateButton {
-  background-color: rgba(49, 46, 129, 0.4);
-  border-color: rgba(30, 27, 75, 0.6);
-  color: #818cf8;
-}
 
 .animateSpinner {
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .checklistSectionRoot {
@@ -255,7 +259,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border);
 }
 
 .dark .checklistSectionRoot {
@@ -283,30 +287,53 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  background-color: #f8fafc;
-  padding: 0.5rem;
+  gap: 0.5rem;
+
+  padding: 0.3rem;
+
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
   border-radius: 0.75rem;
-  border: 1px solid #f1f5f9;
+
+  transition: border-color 0.2s ease;
 }
 
-.dark .subtaskRowContainer {
-  background-color: #020617;
-  border-color: rgba(30, 41, 59, 0.8);
+.subtaskRowContainer:hover {
+  border-color: var(--accent-border);
 }
+
 
 .subtaskInteractiveLabel {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  flex: 1;
+
   cursor: pointer;
+
   font-size: 0.75rem;
-  font-weight: 600;
-  color: #334155;
+  font-weight: 500;
+
+  color: var(--text);
 }
 
-.dark .subtaskInteractiveLabel {
-  color: #cbd5e1;
+.subtaskInteractiveLabel:hover {
+  color: var(--text-h);
+}
+
+
+.subtaskIcon {
+  flex-shrink: 0;
+}
+
+.subtaskIconComplete {
+  color: var(--accent);
+}
+
+.subtaskIconPending {
+  color: var(--text);
+  opacity: 0.5;
 }
 
 .subtaskNativeCheckbox {
@@ -317,24 +344,34 @@
   height: 0.875rem;
 }
 
+
 .strikethroughMutedText {
   text-decoration: line-through;
-  color: #94a3b8;
+  color: var(--text);
+  opacity: 0.6;
 }
 
 .deleteSubbutton {
-  background: none;
+  background: transparent;
   border: none;
-  color: #94a3b8;
-  padding: 0.125rem;
-  border-radius: 0.25rem;
+
+  padding: 0.25rem 0.375rem;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  color: var(--text);
+
+  opacity: 0.6;
   cursor: pointer;
+
+  transition: all 0.2s ease;
 }
 
 .deleteSubbutton:hover {
   color: #f43f5e;
+  opacity: 1;
 }
-
 .flexGapAlignmentRow {
   display: flex;
   gap: 0.5rem;
@@ -343,23 +380,24 @@
 .inputElementTextInline {
   flex: 1;
   padding: 0.375rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  border: 1px solid var(--border);
+  background-color: var(--code-bg);
   border-radius: 0.75rem;
   font-size: 0.75rem;
-  color: #0f172a;
+  color: var(--text-h);
   transition: all 150ms ease;
+  outline: none;
 }
 
-.dark .inputElementTextInline {
-  border-color: #1e293b;
-  background-color: #020617;
-  color: #ffffff;
+.inputElementTextInline:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
 }
+
 
 .addManualStepButton {
-  background-color: #f1f5f9;
-  color: #334155;
+  background-color: var(--accent);
+  color: var(--text-h);
   padding: 0 0.75rem;
   border-radius: 0.75rem;
   font-size: 0.75rem;
@@ -370,23 +408,14 @@
 }
 
 .addManualStepButton:hover {
-  background-color: #e2e8f0;
-}
-
-.dark .addManualStepButton {
-  background-color: #1e293b;
-  color: #e2e8f0;
-}
-
-.dark .addManualStepButton:hover {
-  background-color: #334155;
+  background-color: var(--hover);
 }
 
 /* --- Modal Action Footer --- */
 .modalFooter {
   padding: 1rem 1.5rem;
-  background-color: #f8fafc;
-  border-top: 1px solid #f1f5f9;
+  background-color: var(--code-bg);
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -394,10 +423,6 @@
   flex-shrink: 0;
 }
 
-.dark .modalFooter {
-  background-color: rgba(30, 41, 59, 0.4);
-  border-color: #1e293b;
-}
 
 .cancelActionButton {
   background: none;
@@ -422,7 +447,7 @@
 }
 
 .submitActionButton {
-  background-color: #4f46e5;
+  background-color: var(--accent);
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
@@ -435,6 +460,6 @@
 }
 
 .submitActionButton:hover {
-  background-color: #4338ca;
+  background-color: var(--hover);
   box-shadow: 0 4px 12px -1px rgba(79, 70, 229, 0.25);
 }

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  BrainCircuit, 
-  ListTodo, 
-  Calendar, 
-  Circle, 
-  CheckCircle2, 
-  Edit2, 
-  Trash2 
+import {
+  BrainCircuit,
+  ListTodo,
+  Calendar,
+  Circle,
+  CheckCircle2,
+  Edit2,
+  Trash2
 } from 'lucide-react';
 import styles from './taskView.module.css';
 import { v4 as uuidv4 } from "uuid";
@@ -57,12 +57,11 @@ export const TaskView = ({
   darkMode = true,
   getCategoryDetails = defaultCategoryDetails,
 }: TaskViewProps) => {
-  
+
 
   // --- Local States ---
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [viewMode, setViewMode] = useState<'board' | 'list'>(initialViewMode);
-  
   // Modal states (For localized UI handling)
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -78,7 +77,7 @@ export const TaskView = ({
       priority: 'Medium',
       category: 'work',
       dueDate: new Date().toISOString().split('T')[0],
-      subtasks: []
+      subtasks: [{ id: 'adawrdhfgfg', text: "doing something out of context", "completed": false }, { id: 'addawrdhfgfg', text: "doing something out of context", "completed": false }, { id: 'adawrdhafgfg', text: "doing something out of context", "completed": false }]
     };
     setTasks(prev => [...prev, newTask]);
   };
@@ -112,7 +111,7 @@ export const TaskView = ({
       if (task.id === taskId) {
         return {
           ...task,
-          subtasks: task.subtasks?.map(sub => 
+          subtasks: task.subtasks?.map(sub =>
             sub.id === subtaskId ? { ...sub, completed: !sub.completed } : sub
           )
         };
@@ -133,8 +132,8 @@ export const TaskView = ({
   const handleDrop = (e: React.DragEvent, targetStatus: Task['status']) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData('text/plain');
-    
-    setTasks(prev => prev.map(task => 
+
+    setTasks(prev => prev.map(task =>
       task.id === taskId ? { ...task, status: targetStatus } : task
     ));
   };
@@ -180,21 +179,21 @@ export const TaskView = ({
   // 2. KANBAN BOARD VIEW
   if (viewMode === 'board') {
     const statuses: Task['status'][] = ['Pending', 'In Progress', 'Completed'];
-    
+
     return (
       <div className={`${styles.boardGrid}`}>
         {/* Quick View Switcher Ribbon added for contextual ease */}
-        <div style={{gridColumn: '1 / -1', marginBottom: '10px'}}>
-          <button onClick={() => setViewMode('list')} className={styles.emptyButton} style={{padding: '4px 12px'}}>
+        <div style={{ gridColumn: '1 / -1', marginBottom: '10px' }}>
+          <button onClick={() => setViewMode('list')} className={styles.emptyButton} style={{ padding: '4px 12px' }}>
             Switch to List View
           </button>
         </div>
 
         {statuses.map((status) => {
           const columnTasks = tasks.filter(t => t.status === status);
-          
+
           return (
-            <div 
+            <div
               key={status}
               className={styles.boardColumn}
               onDragOver={handleDragOver}
@@ -203,9 +202,8 @@ export const TaskView = ({
               {/* Column Header */}
               <div className={styles.columnHeader}>
                 <div className={styles.columnHeaderTitleGroup}>
-                  <span className={`${styles.statusDot} ${
-                    status === 'Completed' ? styles.dotGreen : status === 'In Progress' ? styles.dotBlue : styles.dotGray
-                  }`}></span>
+                  <span className={`${styles.statusDot} ${status === 'Completed' ? styles.dotGreen : status === 'In Progress' ? styles.dotBlue : styles.dotGray
+                    }`}></span>
                   <h3 className={styles.columnTitleText}>{status}</h3>
                   <span className={styles.columnCounterCount}>
                     {columnTasks.length}
@@ -220,13 +218,13 @@ export const TaskView = ({
                 </div>
               )}
 
-              {/* Tasks list within column */}
+              {/* Tasks list within column ---------------------------------------------------------------------------------- */}
               <div className={styles.columnCardsScrollableArea}>
                 {columnTasks.map((task) => {
                   const cat = getCategoryDetails(task.category);
                   const completedSubtasks = task.subtasks?.filter(st => st.completed).length || 0;
                   const totalSubtasks = task.subtasks?.length || 0;
-                  
+
                   return (
                     <div
                       key={task.id}
@@ -266,18 +264,18 @@ export const TaskView = ({
                             <span>{completedSubtasks}/{totalSubtasks}</span>
                           </div>
                           <div className={styles.cardProgressTrackBackground}>
-                            <div 
+                            <div
                               className={styles.cardProgressFillIndicator}
                               style={{ width: `${(completedSubtasks / totalSubtasks) * 100}%` }}
                             ></div>
                           </div>
-                          
+
                           {/* Collapsible checklist preview in Board mode */}
                           <div className={styles.boardChecklistInteractiveList}>
                             {task.subtasks?.map(sub => (
                               <label key={sub.id} className={styles.checklistRowCheckboxLabel}>
-                                <input 
-                                  type="checkbox" 
+                                <input
+                                  type="checkbox"
                                   checked={sub.completed}
                                   onChange={() => handleToggleSubtask(task.id, sub.id)}
                                   className={styles.nativeInputElementCheckbox}
@@ -338,11 +336,11 @@ export const TaskView = ({
   return (
     <div className={`${styles.listContainerTableCard}`}>
       <div className={styles.tableElementFakeWrapper}>
-        
+
         {/* Quick View Switcher Ribbon */}
-        <div style={{marginBottom: '15px'}}>
-          <button onClick={() => setViewMode('board')} className={styles.emptyButton} style={{padding: '4px 12px'}}>
-             Switch to Board View
+        <div style={{ marginBottom: '15px' }}>
+          <button onClick={() => setViewMode('board')} className={styles.emptyButton} style={{ padding: '4px 12px' }}>
+            Switch to Board View
           </button>
         </div>
 
@@ -364,7 +362,7 @@ export const TaskView = ({
 
             return (
               <div key={task.id} className={styles.tableRowInteractiveItemGrid}>
-                
+
                 {/* Task Info Column */}
                 <div className={styles.colSpan5FlexibleRowAlignment}>
                   <button
@@ -392,8 +390,8 @@ export const TaskView = ({
                         <div className={styles.listInlineChecklistFlexibleFlexWrapTrack}>
                           {task.subtasks?.map(sub => (
                             <label key={sub.id} className={styles.listInlineSubtaskRowItemCheckboxLabel}>
-                              <input 
-                                type="checkbox" 
+                              <input
+                                type="checkbox"
                                 checked={sub.completed}
                                 onChange={() => handleToggleSubtask(task.id, sub.id)}
                                 className={styles.nativeInputElementCheckbox}

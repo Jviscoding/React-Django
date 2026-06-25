@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Loader2 } from 'lucide-react';
+import { X, Sparkles, Loader2, Square, CheckSquare } from 'lucide-react';
 import styles from './taskModal.module.css';
+import { v4 as uuidv4 } from 'uuid'
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -57,7 +58,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const [formDueDate, setFormDueDate] = useState('');
   const [formSubtasks, setFormSubtasks] = useState<Subtask[]>([]);
   const [newSubtaskInput, setNewSubtaskInput] = useState('');
-  
+
   // Simulated AI loading state
   const [isAiGeneratingSteps, setIsAiGeneratingSteps] = useState(false);
 
@@ -85,7 +86,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   }, [editingTask, isOpen, categories]);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(formDueDate)
   }, [formDueDate])
   if (!isOpen) return null;
@@ -94,7 +95,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const addFormSubtask = () => {
     if (!newSubtaskInput.trim()) return;
     const newSub: Subtask = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       text: newSubtaskInput.trim(),
       completed: false,
     };
@@ -135,7 +136,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   // --- Form Submit Handler ---
   const handleSaveTask = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const finalTask: Task = {
       id: editingTask?.id || crypto.randomUUID(),
       title: formTitle,
@@ -173,7 +174,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         {/* Body Form */}
         <form onSubmit={handleSaveTask} className={styles.formScrollableContainer}>
           <div className={styles.formWrapperSpace}>
-            
+
             {/* Title */}
             <div className={styles.inputGroupStack}>
               <div className={styles.flexSpaceBetweenAlignment}>
@@ -251,23 +252,19 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 </select>
               </div>
 
-              {/* Category */}
-              <div className={styles.inputGroupStack}>
-                <label className={styles.formLabelBase}>Category</label>
-                <select
-                  value={formCategory}
-                  onChange={(e) => setFormCategory(e.target.value)}
-                  className={styles.selectInputElement}
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+
             </div>
 
+            <div className={styles.inputGroupStack}>
+              <label className={styles.formLabelBase}>Tags / Labels (Comma Separated)</label>
+              <input
+                value={formCategory}
+                onChange={(e) => setFormCategory(e.target.value)}
+                className={styles.selectInputElement}
+                type='text'
+              >
+              </input>
+            </div>
             {/* Due Date */}
             <div className={styles.inputGroupStack}>
               <label className={styles.formLabelBase}>Due Date</label>
@@ -292,23 +289,33 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 <div className={styles.subtaskScrollArea}>
                   {formSubtasks.map((st) => (
                     <div key={st.id} className={styles.subtaskRowContainer}>
-                      <label className={styles.subtaskInteractiveLabel}>
-                        <input
-                          type="checkbox"
-                          checked={st.completed}
-                          onChange={() => toggleFormSubtaskState(st.id)}
-                          className={styles.subtaskNativeCheckbox}
-                        />
+                      <label
+                        className={styles.subtaskInteractiveLabel}
+                        onClick={() => toggleFormSubtaskState(st.id)}
+                      >
+                        {st.completed ? (
+                          <CheckSquare
+                            size={16}
+                            className={`${styles.subtaskIcon} ${styles.subtaskIconComplete}`}
+                          />
+                        ) : (
+                          <Square
+                            size={16}
+                            className={`${styles.subtaskIcon} ${styles.subtaskIconPending}`}
+                          />
+                        )}
+
                         <span className={st.completed ? styles.strikethroughMutedText : ''}>
                           {st.text}
                         </span>
                       </label>
+
                       <button
                         type="button"
                         onClick={() => removeFormSubtask(st.id)}
                         className={styles.deleteSubbutton}
                       >
-                        <X size={14} />
+                        Delete
                       </button>
                     </div>
                   ))}

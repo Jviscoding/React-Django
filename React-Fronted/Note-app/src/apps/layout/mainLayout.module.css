@@ -6,6 +6,34 @@
     /* position: relative; */
     overflow-y: hidden;
     max-height: 100vh;
+    flex-direction: column;
+}
+
+
+.lowerContent {
+    display: flex;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: 10px;
+    scrollbar-color: var(--text) transparent;
+}
+
+.lowerContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lowerContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.lowerContent::-webkit-scrollbar-thumb {
+    background: var(--text);
+    opacity: 0.4;
+    border-radius: 999px;
+}
+
+.lowerContent::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 

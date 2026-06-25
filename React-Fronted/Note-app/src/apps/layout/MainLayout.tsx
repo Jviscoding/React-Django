@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../../shared/components/Sidebar";
 import { AuthContextProvider } from "../../features/Auth/context/AuthContext";
 import { AuthUiContextProvider } from "../../features/Auth/context/AuthUiContext";
+import PageHeader from "../../shared/components/Header";
 
 
 // export const supabase = createClient(
@@ -22,17 +23,20 @@ const MainLayout = () => {
         <div className={styles.mainLayout}>
 
 
-            <Sidebar />
-            <main className={styles.mainContent}>
+            <PageHeader handleLogout={function (): void {
+                throw new Error("Function not implemented.");
+            } } user={{displayName:"John Vincent", email: "sample@gmail.com"}}/>   
+            <div className={styles.lowerContent}>
+                <Sidebar />
+                <main className={styles.mainContent}>
 
 
+                    <div className={styles.contentWrapper}>
+                        <Outlet />
 
-                <div className={styles.contentWrapper}>
-                    <Outlet />
-
-                </div>
-            </main>
-
+                    </div>
+                </main>
+            </div>
 
         </div>
 
