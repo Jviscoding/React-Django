@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Loader2, Square, CheckSquare } from 'lucide-react';
 import styles from './taskModal.module.css';
 import { v4 as uuidv4 } from 'uuid'
+import { useMainpagePopupContext } from '../hooks/useMainpagePopupContext';
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -41,81 +42,66 @@ const DEFAULT_CATEGORIES: CategoryOption[] = [
   { id: 'shopping', name: 'Shopping' },
 ];
 
-export const TaskModal: React.FC<TaskModalProps> = ({
-  isOpen,
-  onClose,
-  editingTask,
-  onSave,
-  categories = DEFAULT_CATEGORIES,
-  darkMode = false,
-}) => {
-  // --- Form Local States ---
-  const [formTitle, setFormTitle] = useState('');
-  const [formDescription, setFormDescription] = useState('');
-  const [formStatus, setFormStatus] = useState<Task['status']>('Pending');
-  const [formPriority, setFormPriority] = useState<Task['priority']>('Medium');
-  const [formCategory, setFormCategory] = useState('');
-  const [formDueDate, setFormDueDate] = useState('');
-  const [formSubtasks, setFormSubtasks] = useState<Subtask[]>([]);
-  const [newSubtaskInput, setNewSubtaskInput] = useState('');
+export const TaskModal = () => {
 
+  const { mainPagePopupManager } = useMainpagePopupContext()
   // Simulated AI loading state
   const [isAiGeneratingSteps, setIsAiGeneratingSteps] = useState(false);
 
   // Sync state with editingTask on open/change
   useEffect(() => {
-    if (editingTask) {
-      setFormTitle(editingTask.title);
-      setFormDescription(editingTask.description || '');
-      setFormStatus(editingTask.status);
-      setFormPriority(editingTask.priority);
-      setFormCategory(editingTask.category);
-      setFormDueDate(editingTask.dueDate || '');
-      setFormSubtasks(editingTask.subtasks || []);
+    if (mainPagePopupManager.editingTask) {
+      mainPagePopupManager.setFormTitle(mainPagePopupManager.editingTask.title);
+      mainPagePopupManager.setFormDescription(mainPagePopupManager.editingTask.description || '');
+      mainPagePopupManager.setFormStatus(mainPagePopupManager.editingTask.status);
+      mainPagePopupManager.setFormPriority(mainPagePopupManager.editingTask.priority);
+      mainPagePopupManager.setFormCategory(mainPagePopupManager.editingTask.category);
+      mainPagePopupManager.setFormDueDate(mainPagePopupManager.editingTask.dueDate || '');
+      mainPagePopupManager.setFormSubtasks(mainPagePopupManager.editingTask.subtasks || []);
     } else {
       // Reset form for clean creation
-      setFormTitle('');
-      setFormDescription('');
-      setFormStatus('Pending');
-      setFormPriority('Medium');
-      setFormCategory(categories[0]?.id || '');
-      setFormDueDate('');
-      setFormSubtasks([]);
+      mainPagePopupManager.setFormTitle('');
+      mainPagePopupManager.setFormDescription('');
+      mainPagePopupManager.setFormStatus('Pending');
+      mainPagePopupManager.setFormPriority('Medium');
+      // mainPagePopupManager.setFormCategory(categories[0]?.id || '');
+      mainPagePopupManager.setFormDueDate('');
+      mainPagePopupManager.setFormSubtasks([]);
     }
-    setNewSubtaskInput('');
-  }, [editingTask, isOpen, categories]);
+    mainPagePopupManager.setNewSubtaskInput('');
+  }, [mainPagePopupManager.editingTask, mainPagePopupManager.isOpen]);
 
 
-  useEffect(() => {
-    console.log(formDueDate)
-  }, [formDueDate])
-  if (!isOpen) return null;
+  // useEffect(() => {
+  //   console.log(formDueDate)
+  // }, [formDueDate])
+  // if (!isOpen) return null;
 
   // --- Subtask Action Handlers ---
   const addFormSubtask = () => {
-    if (!newSubtaskInput.trim()) return;
+    if (!mainPagePopupManager.newSubtaskInput.trim()) return;
     const newSub: Subtask = {
       id: uuidv4(),
-      text: newSubtaskInput.trim(),
+      text: mainPagePopupManager.newSubtaskInput.trim(),
       completed: false,
     };
-    setFormSubtasks((prev) => [...prev, newSub]);
-    setNewSubtaskInput('');
+    mainPagePopupManager.setFormSubtasks((prev) => [...prev, newSub]);
+    mainPagePopupManager.setNewSubtaskInput('');
   };
 
   const removeFormSubtask = (id: string) => {
-    setFormSubtasks((prev) => prev.filter((st) => st.id !== id));
+    mainPagePopupManager.setFormSubtasks((prev) => prev.filter((st) => st.id !== id));
   };
 
   const toggleFormSubtaskState = (id: string) => {
-    setFormSubtasks((prev) =>
+    mainPagePopupManager.setFormSubtasks((prev) =>
       prev.map((st) => (st.id === id ? { ...st, completed: !st.completed } : st))
     );
   };
 
   // --- AI Subtask Generation Simulator ---
   const handleAiBreakdown = () => {
-    if (!formTitle.trim()) {
+    if (!mainPagePopupManager.formTitle.trim()) {
       alert('Please enter a task title first so the AI has context!');
       return;
     }
@@ -124,11 +110,11 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     // Simulating API latency response
     setTimeout(() => {
       const generatedSteps: Subtask[] = [
-        { id: crypto.randomUUID(), text: `Initial research regarding "${formTitle}"`, completed: false },
+        { id: crypto.randomUUID(), text: `Initial research regarding "${mainPagePopupManager.formTitle}"`, completed: false },
         { id: crypto.randomUUID(), text: 'Draft primary project requirements', completed: false },
         { id: crypto.randomUUID(), text: 'Review milestones with core stakeholders', completed: false },
       ];
-      setFormSubtasks((prev) => [...prev, ...generatedSteps]);
+      mainPagePopupManager.setFormSubtasks((prev) => [...prev, ...generatedSteps]);
       setIsAiGeneratingSteps(false);
     }, 1200);
   };
@@ -138,234 +124,234 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     e.preventDefault();
 
     const finalTask: Task = {
-      id: editingTask?.id || crypto.randomUUID(),
-      title: formTitle,
-      description: formDescription,
-      status: formStatus,
-      priority: formPriority,
-      category: formCategory,
-      dueDate: formDueDate,
-      subtasks: formSubtasks,
+      id: mainPagePopupManager.editingTask?.id || crypto.randomUUID(),
+      title: mainPagePopupManager.formTitle,
+      description: mainPagePopupManager.formDescription,
+      status: mainPagePopupManager.formStatus,
+      priority: mainPagePopupManager.formPriority,
+      category: mainPagePopupManager.formCategory,
+      dueDate: mainPagePopupManager.formDueDate,
+      subtasks: mainPagePopupManager.formSubtasks,
     };
 
-    onSave(finalTask);
-    onClose();
   };
 
-  const themeClass = darkMode ? styles.dark : '';
 
-  return (
-    <div className={`${styles.modalFixedContainer} ${themeClass}`}>
-      {/* Backdrop blur overlay */}
-      <div onClick={onClose} className={styles.backdropOverlay}></div>
+  return (mainPagePopupManager.isOpen && <div className={`${styles.modalFixedContainer}`}>
+    {/* Backdrop blur overlay */}
+    <div onClick={() => { mainPagePopupManager.setOpen(false) }} className={styles.backdropOverlay}></div>
 
-      {/* Modal Card */}
-      <div className={styles.modalCard}>
-        {/* Header */}
-        <div className={styles.modalHeader}>
-          <h3 className={styles.modalHeaderTitle}>
-            {editingTask ? 'Edit Task Settings' : 'Create New Apex Task'}
-          </h3>
-          <button onClick={onClose} className={styles.closeHeaderButton}>
-            <X size={18} />
-          </button>
-        </div>
+    {/* Modal Card */}
+    <div className={styles.modalCard}>
+      {/* Header */}
+      <div className={styles.modalHeader}>
+        <h3 className={styles.modalHeaderTitle}>
+          {mainPagePopupManager.editingTask ? 'Edit Task Settings' : 'Create New Apex Task'}
+        </h3>
+        <button onClick={() => { mainPagePopupManager.setOpen(false) }} className={styles.closeHeaderButton}>
+          <X size={18} />
+        </button>
+      </div>
 
-        {/* Body Form */}
-        <form onSubmit={handleSaveTask} className={styles.formScrollableContainer}>
-          <div className={styles.formWrapperSpace}>
+      {/* Body Form */}
+      <form onSubmit={handleSaveTask} className={styles.formScrollableContainer}>
+        <div className={styles.formWrapperSpace}>
 
-            {/* Title */}
+          {/* Title */}
+          <div className={styles.inputGroupStack}>
+            <div className={styles.flexSpaceBetweenAlignment}>
+              <label className={styles.formLabelBase}>
+                Task Title <span className={styles.requiredAsterisk}>*</span>
+              </label>
+              <button
+                type="button"
+                onClick={handleAiBreakdown}
+                disabled={isAiGeneratingSteps}
+                className={styles.aiGenerateButton}
+              >
+                {isAiGeneratingSteps ? (
+                  <>
+                    <Loader2 className={styles.animateSpinner} size={12} />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={12} />
+                    <span>✨ Auto-Generate Steps</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <input
+              type="text"
+              required
+              placeholder="e.g., Update marketing presentation deck"
+              value={mainPagePopupManager.formTitle}
+              onChange={(e) => mainPagePopupManager.setFormTitle(e.target.value)}
+              className={styles.inputElementText}
+            />
+          </div>
+
+          {/* Description */}
+          <div className={styles.inputGroupStack}>
+            <label className={styles.formLabelBase}>Description</label>
+            <textarea
+              required={true}
+              placeholder="Provide a detailed brief or outline milestones..."
+              value={mainPagePopupManager.formDescription}
+              rows={2}
+              onChange={(e) => mainPagePopupManager.setFormDescription(e.target.value)}
+              className={styles.textareaElement}
+            ></textarea>
+          </div>
+
+          {/* Status, Priority & Category Grid */}
+          <div className={styles.responsiveThreeColumnGrid}>
+            {/* Status */}
             <div className={styles.inputGroupStack}>
-              <div className={styles.flexSpaceBetweenAlignment}>
-                <label className={styles.formLabelBase}>
-                  Task Title <span className={styles.requiredAsterisk}>*</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={handleAiBreakdown}
-                  disabled={isAiGeneratingSteps}
-                  className={styles.aiGenerateButton}
-                >
-                  {isAiGeneratingSteps ? (
-                    <>
-                      <Loader2 className={styles.animateSpinner} size={12} />
-                      <span>Generating...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles size={12} />
-                      <span>✨ Auto-Generate Steps</span>
-                    </>
-                  )}
-                </button>
-              </div>
+              <label className={styles.formLabelBase}>Status</label>
+              <select
+                value={mainPagePopupManager.formStatus}
+                onChange={(e) => mainPagePopupManager.setFormStatus(e.target.value as Task['status'])}
+                className={styles.selectInputElement}
+              >
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+
+            {/* Priority */}
+            <div className={styles.inputGroupStack}>
+              <label className={styles.formLabelBase}>Priority</label>
+              <select
+                value={mainPagePopupManager.formPriority}
+                onChange={(e) => mainPagePopupManager.setFormPriority(e.target.value as Task['priority'])}
+                className={styles.selectInputElement}
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+
+          </div>
+
+          <div className={styles.inputGroupStack}>
+            <label className={styles.formLabelBase}>Tags / Labels (Comma Separated)</label>
+            <input
+              required
+              value={mainPagePopupManager.formCategory}
+              onChange={(e) => mainPagePopupManager.setFormCategory(e.target.value)}
+              className={styles.selectInputElement}
+              type='text'
+              placeholder='e.g., Household, Food, Job'
+            >
+            </input>
+          </div>
+          {/* Due Date */}
+          <div className={styles.inputGroupStack}>
+            <label className={styles.formLabelBase}>Due Date</label>
+            <div className={styles.relativePositionWrapper}>
               <input
-                type="text"
+                type="date"
                 required
-                placeholder="e.g., Update marketing presentation deck"
-                value={formTitle}
-                onChange={(e) => setFormTitle(e.target.value)}
+                value={mainPagePopupManager.formDueDate}
+                onChange={(e) => mainPagePopupManager.setFormDueDate(e.target.value)}
                 className={styles.inputElementText}
               />
             </div>
+          </div>
 
-            {/* Description */}
-            <div className={styles.inputGroupStack}>
-              <label className={styles.formLabelBase}>Description</label>
-              <textarea
-                placeholder="Provide a detailed brief or outline milestones..."
-                value={formDescription}
-                rows={2}
-                onChange={(e) => setFormDescription(e.target.value)}
-                className={styles.textareaElement}
-              ></textarea>
-            </div>
+          {/* Checklist Subtasks Form Builder */}
+          <div className={styles.checklistSectionRoot}>
+            <label className={styles.checklistSectionLabel}>
+              Task Steps / Checklist Items
+            </label>
 
-            {/* Status, Priority & Category Grid */}
-            <div className={styles.responsiveThreeColumnGrid}>
-              {/* Status */}
-              <div className={styles.inputGroupStack}>
-                <label className={styles.formLabelBase}>Status</label>
-                <select
-                  value={formStatus}
-                  onChange={(e) => setFormStatus(e.target.value as Task['status'])}
-                  className={styles.selectInputElement}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
+            {/* Current subtask rows in state */}
+            {mainPagePopupManager.formSubtasks.length > 0 && (
+              <div className={styles.subtaskScrollArea}>
+                {mainPagePopupManager.formSubtasks.map((st) => (
+                  <div key={st.id} className={styles.subtaskRowContainer}>
+                    <label
+                      className={styles.subtaskInteractiveLabel}
+                      onClick={() => toggleFormSubtaskState(st.id)}
+                    >
+                      {st.completed ? (
+                        <CheckSquare
+                          size={16}
+                          className={`${styles.subtaskIcon} ${styles.subtaskIconComplete}`}
+                        />
+                      ) : (
+                        <Square
+                          size={16}
+                          className={`${styles.subtaskIcon} ${styles.subtaskIconPending}`}
+                        />
+                      )}
+
+                      <span className={st.completed ? styles.strikethroughMutedText : ''}>
+                        {st.text}
+                      </span>
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFormSubtask(st.id)}
+                      className={styles.deleteSubbutton}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
               </div>
+            )}
 
-              {/* Priority */}
-              <div className={styles.inputGroupStack}>
-                <label className={styles.formLabelBase}>Priority</label>
-                <select
-                  value={formPriority}
-                  onChange={(e) => setFormPriority(e.target.value as Task['priority'])}
-                  className={styles.selectInputElement}
-                >
-                  <option value="Low">Low</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
-                </select>
-              </div>
-
-
-            </div>
-
-            <div className={styles.inputGroupStack}>
-              <label className={styles.formLabelBase}>Tags / Labels (Comma Separated)</label>
+            {/* Add raw subtask input row */}
+            <div className={styles.flexGapAlignmentRow}>
               <input
-                value={formCategory}
-                onChange={(e) => setFormCategory(e.target.value)}
-                className={styles.selectInputElement}
-                type='text'
+                type="text"
+                placeholder="Add a custom manual step..."
+                value={mainPagePopupManager.newSubtaskInput}
+                onChange={(e) => mainPagePopupManager.setNewSubtaskInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addFormSubtask();
+                  }
+                }}
+                className={styles.inputElementTextInline}
+              />
+              <button
+                type="button"
+                onClick={addFormSubtask}
+                className={styles.addManualStepButton}
               >
-              </input>
-            </div>
-            {/* Due Date */}
-            <div className={styles.inputGroupStack}>
-              <label className={styles.formLabelBase}>Due Date</label>
-              <div className={styles.relativePositionWrapper}>
-                <input
-                  type="date"
-                  value={formDueDate}
-                  onChange={(e) => setFormDueDate(e.target.value)}
-                  className={styles.inputElementText}
-                />
-              </div>
-            </div>
-
-            {/* Checklist Subtasks Form Builder */}
-            <div className={styles.checklistSectionRoot}>
-              <label className={styles.checklistSectionLabel}>
-                Task Steps / Checklist Items
-              </label>
-
-              {/* Current subtask rows in state */}
-              {formSubtasks.length > 0 && (
-                <div className={styles.subtaskScrollArea}>
-                  {formSubtasks.map((st) => (
-                    <div key={st.id} className={styles.subtaskRowContainer}>
-                      <label
-                        className={styles.subtaskInteractiveLabel}
-                        onClick={() => toggleFormSubtaskState(st.id)}
-                      >
-                        {st.completed ? (
-                          <CheckSquare
-                            size={16}
-                            className={`${styles.subtaskIcon} ${styles.subtaskIconComplete}`}
-                          />
-                        ) : (
-                          <Square
-                            size={16}
-                            className={`${styles.subtaskIcon} ${styles.subtaskIconPending}`}
-                          />
-                        )}
-
-                        <span className={st.completed ? styles.strikethroughMutedText : ''}>
-                          {st.text}
-                        </span>
-                      </label>
-
-                      <button
-                        type="button"
-                        onClick={() => removeFormSubtask(st.id)}
-                        className={styles.deleteSubbutton}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Add raw subtask input row */}
-              <div className={styles.flexGapAlignmentRow}>
-                <input
-                  type="text"
-                  placeholder="Add a custom manual step..."
-                  value={newSubtaskInput}
-                  onChange={(e) => setNewSubtaskInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addFormSubtask();
-                    }
-                  }}
-                  className={styles.inputElementTextInline}
-                />
-                <button
-                  type="button"
-                  onClick={addFormSubtask}
-                  className={styles.addManualStepButton}
-                >
-                  Add Step
-                </button>
-              </div>
+                Add Step
+              </button>
             </div>
           </div>
+        </div>
 
-          {/* Form Footer Action buttons */}
-          <div className={styles.modalFooter}>
-            <button
-              type="button"
-              onClick={onClose}
-              className={styles.cancelActionButton}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={styles.submitActionButton}
-            >
-              Save Task
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Form Footer Action buttons */}
+        <div className={styles.modalFooter}>
+          <button
+            type="button"
+            onClick={() => { mainPagePopupManager.setOpen(false) }}
+            className={styles.cancelActionButton}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={styles.submitActionButton}
+          >
+            Save Task
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
   );
 };

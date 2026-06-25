@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import styles from './taskView.module.css';
 import { v4 as uuidv4 } from "uuid";
+import useMainpageUiContext from '../../hooks/useMainpageUiContenxt';
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -61,7 +62,7 @@ export const TaskView = ({
 
   // --- Local States ---
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [viewMode, setViewMode] = useState<'board' | 'list'>(initialViewMode);
+  const {mainpageUiManager} = useMainpageUiContext()
   // Modal states (For localized UI handling)
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -177,17 +178,11 @@ export const TaskView = ({
   }
 
   // 2. KANBAN BOARD VIEW
-  if (viewMode === 'board') {
+  if (mainpageUiManager.viewMode === 'board') {
     const statuses: Task['status'][] = ['Pending', 'In Progress', 'Completed'];
 
     return (
       <div className={`${styles.boardGrid}`}>
-        {/* Quick View Switcher Ribbon added for contextual ease */}
-        <div style={{ gridColumn: '1 / -1', marginBottom: '10px' }}>
-          <button onClick={() => setViewMode('list')} className={styles.emptyButton} style={{ padding: '4px 12px' }}>
-            Switch to List View
-          </button>
-        </div>
 
         {statuses.map((status) => {
           const columnTasks = tasks.filter(t => t.status === status);
@@ -337,12 +332,6 @@ export const TaskView = ({
     <div className={`${styles.listContainerTableCard}`}>
       <div className={styles.tableElementFakeWrapper}>
 
-        {/* Quick View Switcher Ribbon */}
-        <div style={{ marginBottom: '15px' }}>
-          <button onClick={() => setViewMode('board')} className={styles.emptyButton} style={{ padding: '4px 12px' }}>
-            Switch to Board View
-          </button>
-        </div>
 
         {/* List Header HeaderRow */}
         <div className={styles.tableHeaderColumnsGridRow}>

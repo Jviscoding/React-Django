@@ -163,7 +163,8 @@
 
 /* 🌟 Selected / Active Menu Link State */
 .navBarSelected {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.1) 100%) !important;
+    /* background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.1) 100%) !important; */
+    background-color: var(--accent);
     border: 1px solid rgba(139, 92, 246, 0.35);
     color: #ffffff !important;
     /* Forces link text & active indicators to absolute contrast white */

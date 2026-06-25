@@ -14,7 +14,7 @@ interface AuthCardProps {
   triggerNotification: (message: string, type: 'success' | 'error') => void;
 }
 
-export const AuthPage = ({ onAuthSuccess, triggerNotification }: AuthCardProps) => {
+export const AuthPage = () => {
 
   const { authUiManager } = useUiAuthContext()
 

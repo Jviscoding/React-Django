@@ -31,32 +31,11 @@ const Sidebar = () => {
         },
         {
             to: "/mainpage/brandAndProducts",
-            label: "Brand & Products",
+            label: "Calendar",
             icon: HomeIcon,
-            title: "Brand & Products",
+            title: "Calendar",
             activePath: "/",
-        },
-        {
-            to: "/mainpage/analytics",
-            label: "Analytics",
-            icon: ChartBarIcon,
-            title: "Analytics",
-            activePath: "/analytics",
-        },
-        {
-            to: "/budgetSetting",
-            label: "Budget Settings",
-            icon: CurrencyDollarIcon,
-            title: "Budget Settings",
-            activePath: "/budgetsettings",
-        },
-        {
-            to: "/AccountSettings",
-            label: "Account Settings",
-            icon: CogIcon,
-            title: "Account Settings",
-            activePath: "/accountsettings",
-        },
+        }
     ];
     const logoutItem = {
         label: "Logout",

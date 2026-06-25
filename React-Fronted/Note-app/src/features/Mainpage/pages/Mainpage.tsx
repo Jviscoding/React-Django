@@ -9,11 +9,13 @@ import { UtilityBar } from '../components/TaskNav/UtilityBar';
 import { TaskView } from '../components/TaskView/TaskView';
 import { TaskModal, type Task } from '../components/TaskModal';
 import { AlertCircle, CheckCircle, Clock, Folder } from 'lucide-react';
+import { MainPageHeader, type ViewMode } from '../components/MainpageHeader';
 
 export default function Mainpage() {
 
     const getData = TaskApi();
 
+    console.log("DADADA")
 
     document.documentElement.setAttribute(
         "data-theme",
@@ -38,6 +40,7 @@ export default function Mainpage() {
     return (
         <div className={styles.mainWrapper}>
 
+            <MainPageHeader />
             <KpiContainer>
                 <StatsCard title='Active Tasks' total={4} subMessage='total loaded' icon={Folder} iconStyle={iconStyles[0]}></StatsCard>
                 <StatsCard title='Completed' total={4} subMessage='archived' icon={Clock} iconStyle={iconStyles[1]}></StatsCard>
@@ -51,11 +54,7 @@ export default function Mainpage() {
             <UtilityBar />
             <TaskView />
 
-            <TaskModal isOpen={false} onClose={function (): void {
-                throw new Error('Function not implemented.');
-            }} editingTask={null} onSave={function (task: Task): void {
-                throw new Error('Function not implemented.');
-            }} />
+            <TaskModal/>
 
         </div>
 

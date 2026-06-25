@@ -14,12 +14,7 @@ export default function AppRouter(){
                 <Route index element={<TaskView/>} />
 
             </Route>
-            <Route path="/auth" element={<AuthPage onAuthSuccess={function (user: UserSession): void {
-                throw new Error("Function not implemented.");
-            } } triggerNotification={function (message: string, type: "success" | "error"): void {
-                throw new Error("Function not implemented.");
-            } }/>}>
-                <Route index element={<TaskView/>} />
+            <Route path="/auth" element={<AuthPage/>}>
 
             </Route>
 
