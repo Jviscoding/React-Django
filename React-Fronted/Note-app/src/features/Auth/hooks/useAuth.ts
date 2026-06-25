@@ -272,7 +272,7 @@ export default function useAuth(): UseAuthType {
         if (window.location.href.includes('redirect')) return;
 
         if (!userData || !userData.email) {
-            nav('/auth');
+            // nav('/auth');
             return
         }
 

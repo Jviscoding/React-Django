@@ -1,85 +1,125 @@
 .card {
   position: relative;
   display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 20px;
+  
+  /* MOBILE-FIRST DIRECTIVE: Stack vertically on phones to give text maximum room */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
 
-  padding: 10px;
-
-  background-color: var(--bg);
+  background-color: var(--social-bg);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow);
+  
   overflow: hidden;
   box-sizing: border-box;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+/* Premium micro-interaction on hover */
+.card:hover {
+  border-color: var(--accent-border);
 }
 
 /* Background Blur Ambient Effect */
 .blurBlob {
   position: absolute;
-  top: 0;
-  right: 0;
-
+  top: -24px;  
+  right: -24px;
   width: 96px;
   height: 96px;
-
   background-color: var(--accent-bg);
-
   border-radius: 50%;
   filter: blur(40px);
-
   transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  z-index: 1;
 }
 
-/* Hover Zoom Effect */
-.group:hover .blurBlob {
-  transform: scale(1.25);
+.card:hover .blurBlob {
+  transform: scale(1.4);
+}
+
+/* --- THE CRITICAL TEXT WRAPPER ENVIRONMENT --- */
+.textStack {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  
+  /* CRITICAL HYDRATION FIX: Flexbox child containers default to min-width: auto. 
+     Setting this to 0 forces the stack to respect boundaries instead of overflowing. */
+  min-width: 0; 
+  width: 100%;
 }
 
 /* Label */
 .label {
-  font-size: 12px;
+  font-size: 11px; 
   font-weight: 700;
-
   color: var(--text);
-
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+
+  /* TEXT OVERFLOW INSURANCE */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Count Row */
+/* Count Row Container */
 .valueContainer {
   display: flex;
-  flex-direction: column;
+  
+  /* Allow mobile layouts to drop badge values safely below numbers if text length breaks bounds */
+  flex-wrap: wrap; 
   align-items: baseline;
-  gap: 8px;
-
-  margin-top: 8px;
+  gap: 0.375rem; 
+  margin-top: 0.375rem;
+  min-width: 0;
+  flex-direction: column;
 }
 
 /* Main Number */
 .count {
-  font-size: 25 px;
+  font-size: 1.5rem; 
   font-weight: 800;
-
   color: var(--text-h);
-
   line-height: 1;
+  margin: 0;
+
+  /* Prevent crazy numbers/string hashes from busting the wrapper layout */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Subtitle / Descriptive Text */
+.subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0;
 
+  /* Safeguard to truncate strings if columns scale extremely small */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- BASE ADAPTIVE KPI ICON WRAPPERS --- */
 .statIcon {
-  width: 40px;
-  height: 40px;
-
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 12px;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .statIconSvg {
@@ -87,34 +127,20 @@
   height: 20px;
 }
 
-.statIconIndigo {
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  color: #818cf8;
-}
+.statIconIndigo { background: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent); }
+.statIconAmber  { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); color: var(--status-pending); }
+.statIconGreen  { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); color: var(--status-completed); }
+.statIconRed    { background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); color: var(--status-high); }
 
-.statIconAmber {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-}
 
-.statIconGreen {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #34d399;
-}
-
-.statIconRed {
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.2);
-  color: #fb7185;
-}
-
-/* Subtitle */
-.subtitle {
-  font-size: 12px;
-  font-weight: 500;
-
-  color: var(--text);
+/* ==========================================================================
+   🖥️ RESPONSIVE BREAKPOINT UPGRADE: TABLET TO DESKTOP
+   ========================================================================== */
+@media (min-width: 640px) {
+  .card {
+    /* Seamlessly snap back to clean horizontal orientation when width permits */
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+  }
 }

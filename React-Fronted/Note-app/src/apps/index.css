@@ -1,42 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-  /* --- LIGHT MODE: SLATE DEVELOPER PALETTE --- */
-  --text: #475569;
-  /* Slate-600: Readable paragraph & label text */
+  /* --- RE-ENGINEERED LIGHT MODE: SEMANTIC SLATE PALETTE --- */
+  --bg: #f1f5f9;
+  /* CHANGED: Slate-100 (Was Slate-50). Moving the base canvas down a shade 
+     allows your white cards (#ffffff) to physically "pop" off the screen. */
+
+  --text: #334155;
+  /* CHANGED: Slate-700 (Was Slate-600). Higher contrast ratio (WCAG AA compliant) 
+     to ensure text doesn't look washed out against lighter canvases. */
+
   --text-h: #0f172a;
   /* Slate-900: Deep crisp header & primary titles */
-  --bg: #f8fafc;
-  /* Slate-50: Clean, light app workspace canvas */
-  --border: #e2e8f0;
-  /* Slate-200: Elegant borders for cards, boards, & fields */
-  --code-bg: #f1f5f9;
-  /* Slate-100: Dedicated background for playground code blocks */
 
-  /* Brand Accent (Signature SynergyTask Indigo/Purple) */
+  --border: #cbd5e1;
+  /* CHANGED: Slate-300 (Was Slate-200). A stronger structural boundary line 
+     that frames cards, columns, and navigation bars with clear authority. */
+
+  --code-bg: #e2e8f0;
+  /* CHANGED: Slate-200 (Was Slate-100). Keeps terminal environments and playground 
+     blocks safely recessed below the card layout layers. */
+
+  /* --- BRAND ACCENT & HOVER INTENTIONS --- */
   --accent: #4f46e5;
+  /* Indigo-600: Core psychological anchor for primary CTA focus */
+  --hover: #4338ca;
+  /* CHANGED: Indigo-700 (Was #847efb). In light mode, a hover state should darken, 
+     not lighten, to imply physical depression/interaction depth to the brain. */
 
-  --hover:#847efb;
-  /* Indigo-600: Buttons, active states, and navigation highlights */
-  --accent-bg: rgba(79, 70, 229, 0.08);
+  --accent-bg: rgba(79, 70, 229, 0.06);
   /* Soft Indigo Tint: Selected tabs & background highlights */
-  --accent-border: rgba(79, 70, 229, 0.4);
+  --accent-border: rgba(79, 70, 229, 0.5);
   /* Focused element outlines & interactive dropzones */
 
-  /* System Utilities & Surfaces */
-  --social-bg: rgba(226, 232, 240, 0.4);
-  /* Transparent secondary actions & list filters */
-  --shadow: rgba(15, 23, 42, 0.08) 0px 10px 15px -3px, rgba(15, 23, 42, 0.04) 0px 4px 6px -2px;
+  /* --- STRUCTURAL SURFACES & ENHANCED DEPTH SHADOWS --- */
+  --social-bg: #ffffff;
+  /* CHANGED: Solid white background for internal component cards. Placing a white 
+     surface over a Slate-100 background mimics real-world layered paper psychology. */
 
-  /* Status Colors (Extracted from Sprint Badges) */
-  --status-pending: #d97706;
-  /* Amber-600 */
+  --shadow:
+    rgba(15, 23, 42, 0.08) 0px 1px 3px 0px,
+    rgba(15, 23, 42, 0.12) 0px 10px 20px -5px,
+    rgba(15, 23, 42, 0.04) 0px 4px 6px -2px;
+  /* CHANGED: Added an ambient tight shadow closure (the 1px variant) and deepened 
+     the ambient drop scatter. This gives complex app panels immediate physical gravity. */
+
+  /* --- STATUS BADGES --- */
+  --status-pending: #b45309;
+  /* Amber-700: Darkened slightly for clear light-canvas reading */
   --status-progress: #4f46e5;
   /* Indigo-600 */
-  --status-completed: #059669;
-  /* Emerald-600 */
-  --status-high: #e11d48;
-  /* Rose-600 */
+  --status-completed: #047857;
+  /* Emerald-700: Darkened for optimal legibility */
+  --status-high: #be123c;
+  /* Rose-700: Higher text contrast ratio */
 
   /* --- TYPOGRAPHY SPECIFICATION --- */
   --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -45,7 +62,7 @@
 
   /* Global Core Engine Settings */
   font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+  letter-spacing: 0.15px;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -60,32 +77,48 @@
 }
 
 [data-theme="dark"] {
-  /* --- DARK MODE: SLATE OBSIDIAN PALETTE --- */
+  /* ==========================================================================
+     DARK MODE: ELEVATED OBSIDIAN ENVIRONMENT (FIXED & BALANCED)
+     ========================================================================== */
+  --bg: #030712;
+  /* CHANGED: Gray-950 (Was Slate-950 #020617). Shifting slightly away from blue 
+     into a richer black gives the background an immense, infinite depth. */
+
+  --social-bg: #0f172a;
+  /* CHANGED: Slate-900 (Was Slate-800/50 transparent). App components and 
+     workspace cards are now given a solid, lighter surface. This creates immediate 
+     physical elevation over the deeper background canvas. */
+
+  --code-bg: #1e293b;
+  /* CHANGED: Slate-800 (Was Slate-900). Code blocks are stepped up to stay 
+     distinct and highly defined within the new card layout. */
+
   --text: #94a3b8;
-  /* Slate-400: Clear muted typography on dark surfaces */
+  /* Slate-400: Smooth, clean readability that minimizes text-glow eye strain */
+
   --text-h: #f8fafc;
-  /* Slate-50: Crisp, near-white high-contrast text */
-  --bg: #020617;
-  /* Slate-950: Extreme deep workspace environment */
+  /* Slate-50: Stark, highly polished headers */
+
   --border: #1e293b;
-  /* Slate-800: Gridlines separating columns and tabs */
-  --code-bg: #0f172a;
-  /* Slate-900: Server console & terminal response blocks */
+  /* CHANGED: Slate-800. Solid, reliable borders that match card structures without 
+     relying on pure transparency tricks that fail across different monitors. */
 
-  /* Dark Mode Indigo Accent Adjustments */
+  /* Dark Mode Accents & Vibrant Interaction Affordances */
   --accent: #6366f1;
-  /* Indigo-500: Vibrant radiant branding for dark UI layers */
-  --accent-bg: rgba(99, 102, 241, 0.15);
-  /* Enhanced purple aura for drag drop indicators */
-  --accent-border: rgba(99, 102, 241, 0.5);
-  /* Glowing state outlines for fields and tasks */
+  /* Indigo-500: Radiant brand indicator on dark surfaces */
+  --hover: #818cf8;
+  /* Indigo-400: Expands towards light on hover to show life */
+  --accent-bg: rgba(99, 102, 241, 0.12);
+  --accent-border: rgba(99, 102, 241, 0.45);
 
-  /* Structural Dark Surfaces & Shadows */
-  --social-bg: rgba(30, 41, 59, 0.5);
-  /* Slate-800/50: Secondary panels & action tiles */
-  --shadow: rgba(0, 0, 0, 0.6) 0px 10px 15px -3px, rgba(0, 0, 0, 0.4) 0px 4px 6px -2px;
+  /* Dark Mode Ambient Occlusion Shadows */
+  --shadow:
+    rgba(0, 0, 0, 0.5) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.7) 0px 20px 25px -5px;
+  /* REMODELED: Heavily weighted black drop values to absorb light bleed, pinning 
+     the elevated cards down over the matrix background. */
 
-  /* Dark Mode Status Adjustments */
+  /* Status Tokens (Optimized for Dark Backgrounds) */
   --status-pending: #f59e0b;
   /* Amber-500 */
   --status-progress: #6366f1;

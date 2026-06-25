@@ -1,42 +1,44 @@
 /* ==========================================================================
    🔑 Prismatic Aurora Sidebar Stylesheet
-   Fully compatible with minimized toggle states & your #0f172b brand anchor.
    ========================================================================== */
 
 .navBarContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 300px;
-    height: 100%;
-    background-color: #0f172b;
-    /* Anchor Navy Base */
-    overflow: hidden;
-    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Elegant spring ease */
-    border-right: 1px solid rgba(139, 92, 246, 0.12);
-    /* Ultra-fine glowing border */
-    position: relative;
-    box-shadow: 4px 0 24px rgba(15, 23, 43, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  height: 100%;
+  
+  /* FIX: Bound to elevation surface layer instead of hardcoded background colors 
+     so it seamlessly lightens or deepens when toggled. */
+  background-color: var(--social-bg);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  transition: width 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
 }
 
-/* 🧭 Minimized Sidebar Override */
+/* 🧭 Minimized Sidebar State Layout Override */
 .minNavBar {
-    width: 72px;
-    /* Standard optimized icon column footprint */
+  width: 72px;
 }
 
-/* 🏷️ Navigation Labels & Toggle Classes */
+/* 🏷️ Navigation Typography Layout & Clamping */
 .navBarLabel {
-    display: flex;
-    overflow: hidden;
-    white-space: nowrap;
-    opacity: 1;
-    transition: opacity 0.2s ease;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 200ms ease;
+  font-family: var(--sans);
 }
 
 .hideNavBarLabel {
-    display: none !important;
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -44,55 +46,49 @@
    ========================================================================== */
 
 .siteNameContainer {
-    width: 100%;
-    height: 80px;
-    /* Bushed down from 100px for sleeker layout proportions */
-    border-bottom: 1px solid rgba(139, 92, 246, 0.15);
-    /* Replaced harsh gray with subtle amethyst divider */
-    display: flex;
-    justify-content: space-between;
-    /* Cleaner edge-to-edge alignment */
-    align-items: center;
-    padding: 0 20px;
-    box-sizing: border-box;
+  width: 100%;
+  height: 72px; /* Scaled down for sleek software density */
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem; /* 20px spacing */
+  box-sizing: border-box;
 }
 
 .titleContainer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
 }
 
 .siteNameContainer p {
-    color: #ffffff;
-    font-family: "Inter", sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin: 0;
-    white-space: nowrap;
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  white-space: nowrap;
 }
 
-/* Minimize Toggle Icon */
-.siteNameContainer>i {
-    color: #94a3b8;
-    /* Muted Slate-400 */
-    cursor: pointer;
-    border-radius: 8px;
-    font-size: 1.25rem;
-    padding: 8px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+/* Minimize Toggle Interaction Icon */
+.siteNameContainer > i {
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  padding: 8px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 200ms ease;
 }
 
-.siteNameContainer>i:hover {
-    color: #8b5cf6;
-    /* Turns Electric Amethyst on hover */
-    background-color: rgba(139, 92, 246, 0.12);
-    /* Translucent glow plate */
+.siteNameContainer > i:hover {
+  color: var(--accent);
+  background-color: var(--accent-bg);
 }
 
 /* ==========================================================================
@@ -100,145 +96,128 @@
    ========================================================================== */
 
 .linkContainer {
-    display: flex;
-    flex-direction: column;
-    padding: 16px 12px;
-    /* Even inner margins */
-    flex-grow: 1;
-    /* Naturally fills remaining space */
-    width: 100%;
-    box-sizing: border-box;
-    gap: 8px;
-    /* Standard micro-gap for density */
-    overflow-y: auto;
-    /* Gracefully scroll internally if menu has too many items */
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.75rem;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 6px; /* Tight grid alignment for structural density */
+  overflow-y: auto;
 }
 
-.linkContainer button {
-    margin-top: auto;
-    margin-bottom: 100px;
+/* Anchor secondary push mechanics for structural alignment */
+.linkContainer button, 
+.linkContainer .logoutBtn {
+  margin-top: auto;
+  margin-bottom: 1rem;
 }
 
 /* Standard Link Node */
-.navBarContainer .linkContainer>a {
-    width: 100%;
-    height: 44px;
-    /* SaaS Gold standard for touch & mouse targets */
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    /* Symmetrical internal layout */
-    text-decoration: none;
-    font-size: 0.95rem;
-    /* Clean professional body sizing */
-    border-radius: 10px;
-    color: #94a3b8;
-    /* Secondary slate default color */
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-    gap: 12px;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    user-select: none;
-    -webkit-user-drag: none;
+.navBarContainer .linkContainer > a {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 500;
+  gap: 12px;
+  box-sizing: border-box;
+  transition: all 200ms ease;
+  user-select: none;
+  border: 1px solid transparent;
 }
 
+/* Utility centering block configuration for icon tracking */
 .toggleLinkHide {
-
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Hover Interaction: Premium Glow */
-.navBarContainer .linkContainer>a:hover {
-    color: #f8fafc;
-    /* Near pure white */
-    background-color: rgba(255, 255, 255, 0.04);
-    /* Sleek translucent overlay */
-    padding-left: 20px;
-    /* Playful horizontal push */
+/* Hover Interaction Strategy: Premium Adaptive Micro-push */
+.navBarContainer .linkContainer > a:hover {
+  color: var(--text-h);
+  background-color: var(--accent-bg);
+  border-color: var(--accent-border);
+  padding-left: 20px; /* Micro horizontal transition */
 }
 
-
-
-/* 🌟 Selected / Active Menu Link State */
-.navBarSelected {
-    /* background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.1) 100%) !important; */
-    background-color: var(--accent);
-    border: 1px solid rgba(139, 92, 246, 0.35);
-    color: #ffffff !important;
-    /* Forces link text & active indicators to absolute contrast white */
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
-    /* Soft premium active aura */
+/* 🌟 Dynamic Selected / Active State */
+.navBarContainer .linkContainer > .navBarSelected {
+  background-color: var(--accent) !important;
+  border-color: var(--accent-border) !important;
+  color: #ffffff !important; /* Perfect physical high contrast standout */
+  box-shadow: var(--shadow);
 }
 
-/* Active Link State Overrides */
+.navBarSelected:hover {
+  background-color: var(--hover) !important;
+}
+
+/* Highlights inside selected links match structural color schemes */
 .navBarSelected .icon {
-    color: #a78bfa !important;
-    /* Highlights icon in a brilliant purple tint */
+  color: #ffffff !important;
 }
 
-
-/* Consistent sizing on link icons */
+/* Consistent Core Icons Sizing */
 .icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.25rem;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    color: inherit;
-    /* Matches active/inactive parent link states perfectly */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.15rem;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: inherit;
+  transition: color 200ms ease;
 }
 
-/* 🚨 Self-Contained Triadic Cyber Rose Logout Button */
+/* ==========================================================================
+   🚨 Self-Contained Adaptive Danger Action Layer (Logout Button)
+   ========================================================================== */
 .logoutBtn {
-    width: 100%;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    text-decoration: none;
-    font-size: 0.95rem;
-    border-radius: 10px;
-    color: #94a3b8;
-    font-weight: 500;
-    gap: 12px;
-    box-sizing: border-box;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    user-select: none;
-    background: transparent;
-    border: 1px solid transparent;
-    outline: none;
-    cursor: pointer;
-    text-align: left;
-    appearance: none;
-    margin: 0;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 500;
+  gap: 12px;
+  box-sizing: border-box;
+  user-select: none;
+  background: transparent;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  
+  /* FIX: Replaced jumpy, competing transitions with an even, linear-spring ease */
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hover Interaction: Cyber Rose Glow */
+/* Hover Interaction: Cyber Rose Glow Adaptive Shift */
 .logoutBtn:hover {
-    color: #fda4af !important;
-    /* Soft rose text */
-    background-color: rgba(244, 63, 94, 0.08);
-    /* 8% Translucent Triadic Rose */
-    border-color: rgba(244, 63, 94, 0.25) !important;
-    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
-    /* Holographic Warm Alert Glow */
-    padding-left: 20px;
-}
-
-.logoutBtn:hover {
-    padding-left: 16px;
+  color: var(--status-high) !important;
+  background-color: rgba(244, 63, 94, 0.08); /* 8% Translucent Rose dynamic canvas */
+  border-color: rgba(244, 63, 94, 0.25) !important;
+  padding-left: 20px; /* FIX: Unified animation tracking to stop the layout jittering */
 }
 
 .logoutBtn:hover .icon {
-    color: #f43f5e !important;
-    /* Active saturated rose icon color */
+  color: var(--status-high) !important;
 }
 
-/* Tactile click scale action */
+/* Tactile click physics feedback action */
 .logoutBtn:active {
-    transform: scale(0.97);
+  transform: scale(0.98);
 }

@@ -69,14 +69,6 @@ export default function PageHeader({
             <div className={styles.avatar}>
               {user.displayName.charAt(0).toUpperCase()}
             </div>
-
-            <button
-              onClick={handleLogout}
-              className={styles.logoutButton}
-              title="Sign out"
-            >
-              <LogOut size={16} />
-            </button>
           </div>
         )}
       </div>
