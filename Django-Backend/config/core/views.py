@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from .models import Task, User
+from .models import User
 from rest_framework.views import APIView, Response
 from .Serializers.UserSerializer import UserSerializer
-from .Serializers.TaskSerializer import TaskSerializer
 
 # Create your views here.
 
@@ -56,7 +55,7 @@ class UserView(APIView):
             return Response({
             "success": True, 
             "message": "User Data already existed",
-            "data": UserSerializer(user).data}, status=200)
+            "data": UserSerializer( ).data}, status=200)
         
         except User.DoesNotExist:
              

@@ -1,4 +1,8 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import type { Subtask, Task } from "./useMainpage";
+import useMainpageUiContext from "./useMainpageUiContenxt";
+import { v4 as uuidv4 } from 'uuid'
+import useMainpageContext from "./useMainpageContext";
 
 export type UseMainpagePopupType = {
     formTitle: string;
@@ -27,51 +31,16 @@ export type UseMainpagePopupType = {
 
     isOpen: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    formId: string;
+    setFormId: React.Dispatch<React.SetStateAction<string>>;
 
-
-    editingTask: Task | null
-    setEditingTask: React.Dispatch<React.SetStateAction<Task | null>>;
+    addFormSubtask: () => void;
+    removeFormSubtask: (id: string) => void;
+    toggleFormSubtaskState: (id: string) => void;
+    handleSaveTask: (e: React.SubmitEvent) =>void;
 
 }
 
-
-// --- TS Interfaces ---
-export type Subtask = {
-    id: string;
-    text: string;
-    completed: boolean;
-}
-
-export type Task = {
-    id: string;
-    title: string;
-    description?: string;
-    status: 'Pending' | 'In Progress' | 'Completed';
-    priority: 'High' | 'Medium' | 'Low';
-    category: string;
-    dueDate?: string;
-    subtasks?: Subtask[];
-}
-
-type CategoryOption = {
-    id: string;
-    name: string;
-}
-
-type TaskModalProps = {
-    isOpen: boolean;
-    onClose: () => void;
-    editingTask: Task | null;
-    onSave: (task: Task) => void;
-    categories?: CategoryOption[];
-    darkMode?: boolean;
-}
-
-const DEFAULT_CATEGORIES: CategoryOption[] = [
-    { id: 'work', name: 'Work' },
-    { id: 'personal', name: 'Personal' },
-    { id: 'shopping', name: 'Shopping' },
-];
 
 export default function useMainpagePopup(): UseMainpagePopupType {
 
@@ -85,7 +54,124 @@ export default function useMainpagePopup(): UseMainpagePopupType {
     const [formSubtasks, setFormSubtasks] = useState<Subtask[]>([]);
     const [newSubtaskInput, setNewSubtaskInput] = useState('');
     const [isOpen, setOpen] = useState<boolean>(false);
-    const [editingTask, setEditingTask] = useState<Task | null>(null)
+    const [formId, setFormId] = useState<string>("");
+
+
+    const { mainpageUiManager } = useMainpageUiContext();
+    const { mainpageManager} = useMainpageContext();
+
+
+    // Sync state with editingTask on open/change
+    useEffect(() => {
+        if (mainpageUiManager.editingTask) {
+            setFormTitle(mainpageUiManager.editingTask.title);
+            setFormDescription(mainpageUiManager.editingTask.description || '');
+            setFormStatus(mainpageUiManager.editingTask.status);
+            setFormPriority(mainpageUiManager.editingTask.priority);
+            setFormCategory(mainpageUiManager.editingTask.category);
+            setFormDueDate(mainpageUiManager.editingTask.dueDate || '');
+            setFormSubtasks(mainpageUiManager.editingTask.subtasks || []);
+            setFormId(mainpageUiManager.editingTask.id);
+        } else {
+            // Reset form for clean creation
+            setFormTitle('');
+            setFormDescription('');
+            setFormStatus('Pending');
+            setFormPriority('Medium');
+            // setFormCategory(categories[0]?.id || '');
+            setFormDueDate('');
+            setFormSubtasks([]);
+        }
+
+        setNewSubtaskInput('');
+    }, [mainpageUiManager.editingTask, isOpen]);
+
+
+
+    // --- Subtask Action Handlers ---
+    const addFormSubtask = () => {
+        if (!newSubtaskInput.trim()) return;
+        const newSub: Subtask = {
+            id: uuidv4(),
+            text: newSubtaskInput.trim(),
+            completed: false,
+        };
+        setFormSubtasks((prev) => [...prev, newSub]);
+        setNewSubtaskInput('');
+    };
+
+    const removeFormSubtask = (id: string) => {
+        setFormSubtasks((prev) => prev.filter((st) => st.id !== id));
+    };
+
+    const toggleFormSubtaskState = (id: string) => {
+        setFormSubtasks((prev) =>
+            prev.map((st) => (st.id === id ? { ...st, completed: !st.completed } : st))
+        );
+    };
+
+
+
+    // --- Form Submit Handler ---
+    const handleSaveTask = (e: React.SubmitEvent) => {
+        e.preventDefault();
+
+        const finalTask: Task = {
+            id: mainpageUiManager.editingTask?.id || crypto.randomUUID(),
+            title: formTitle,
+            description:formDescription,
+            status: formStatus,
+            priority: formPriority,
+            category: formCategory,
+            dueDate: formDueDate,
+            subtasks: formSubtasks,
+        };
+
+
+        // when updating/editing existing task
+        if (mainpageUiManager.editingTask) {
+
+            mainpageManager.setTasks((prev) => {
+                if (!prev) return prev;
+
+                return prev.map((task: Task) => {
+                    const isFound = task.id === finalTask.id;
+
+                    if (!isFound) return task;
+
+                    return {
+                        ...task,
+                        title: finalTask.title,
+                        description: finalTask.description,
+                        status: finalTask.status,
+                        priority: finalTask.priority,
+                        category: finalTask.category,
+                        dueDate: finalTask.dueDate,
+                        subtasks: finalTask.subtasks
+                        // update properties here
+                    };
+                });
+            });
+
+
+            mainpageUiManager.setEditingTask(null);
+
+            // when creating a new task
+        } else {
+
+            mainpageManager.createNewTask(finalTask);
+
+            mainpageManager.setTasks((prev) => {
+                if (!prev) return prev;
+
+                return [...prev, finalTask]
+
+            })
+        }
+
+        setOpen(false)
+    }
+
 
 
     return {
@@ -98,8 +184,8 @@ export default function useMainpagePopup(): UseMainpagePopupType {
         formSubtasks,
         newSubtaskInput,
         isOpen,
-        editingTask,
-        setEditingTask,
+        formId,
+        setFormId,
         setOpen,
         setFormTitle,
         setFormDescription,
@@ -108,6 +194,10 @@ export default function useMainpagePopup(): UseMainpagePopupType {
         setFormPriority,
         setFormStatus,
         setFormSubtasks,
-        setNewSubtaskInput
+        setNewSubtaskInput,
+        addFormSubtask,
+        removeFormSubtask,
+        toggleFormSubtaskState,
+        handleSaveTask
     }
 }

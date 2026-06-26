@@ -8,6 +8,9 @@ export type UseMainpageUiType = {
 
 
 
+    editingTask: Task | null
+    setEditingTask: React.Dispatch<React.SetStateAction<Task | null>>;
+
 }
 
 
@@ -46,14 +49,16 @@ type TaskModalProps = {
 
 
 export default function useMainpageUi(): UseMainpageUiType {
-  const [viewMode, setViewMode] = useState<'board' | 'list'>('board');
-
+    const [viewMode, setViewMode] = useState<'board' | 'list'>('board');
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
 
 
 
 
     return {
         viewMode,
-        setViewMode
+        setViewMode,
+        editingTask,
+        setEditingTask
     }
 }

@@ -10,19 +10,17 @@ import { TaskView } from '../components/TaskView/TaskView';
 import { TaskModal, type Task } from '../components/TaskModal';
 import { AlertCircle, CheckCircle, Clock, Folder } from 'lucide-react';
 import { MainPageHeader, type ViewMode } from '../components/MainpageHeader';
-import useMainpageContext from '../hooks/useMainpageContext';
 
 export default function Mainpage() {
 
 
-    const {mainpageManager} = useMainpageContext()
     document.documentElement.setAttribute(
         "data-theme",
         "dark"
     );
  
     useEffect(()=>{
-        mainpageManager.getAllTaskData()
+        // mainpageManager.createNewTask()
     }, [])
 
     return (

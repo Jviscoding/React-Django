@@ -1,11 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { serverAddress } from "../../../shared/constants/constant"
 import { useAuthContext } from "../../Auth/hooks/useAuthContext.ts"
+import type { Task } from "../hooks/useMainpage.ts"
 
 
 type TaskApiType = {
-    getAllTask: ()=>Promise<any>
-
+    getAllTask: () => Promise<any>
+    createTask: (task: Task) => Promise<any>
 }
 
 
@@ -15,7 +16,7 @@ type TaskApiType = {
 export default function TaskApi(): TaskApiType {
 
 
-    const {authManager} = useAuthContext()
+    const { authManager } = useAuthContext()
 
 
     async function getAccessToken() {
@@ -25,17 +26,11 @@ export default function TaskApi(): TaskApiType {
         return session?.data.session?.access_token ?? null;
     }
 
-    const getAllTask = async() => {
-
+    const getAllTask = async () => {
         try {
-
-
             const accessToken = await getAccessToken();
 
-                        console.log("FETCHINGG")
-
-
-            const result =await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
+            const result = await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
@@ -53,6 +48,36 @@ export default function TaskApi(): TaskApiType {
         }
 
 
+    }
+
+
+    const createTask = async(task: Task) => {
+
+
+        console.log(task)
+
+        try {
+            const accessToken = await getAccessToken();
+
+            const result = await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+
+                },
+                body: JSON.stringify({
+                    task: task
+                })
+            })
+
+
+            const data = await result.json()
+            console.log(data)
+
+        } catch (error) {
+
+        }
     }
 
 
@@ -78,7 +103,8 @@ export default function TaskApi(): TaskApiType {
 
     return {
 
-        getAllTask
+        getAllTask,
+        createTask
     }
 
 

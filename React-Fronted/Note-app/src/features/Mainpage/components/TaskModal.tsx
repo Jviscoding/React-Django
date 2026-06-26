@@ -3,6 +3,8 @@ import { X, Sparkles, Loader2, Square, CheckSquare } from 'lucide-react';
 import styles from './taskModal.module.css';
 import { v4 as uuidv4 } from 'uuid'
 import { useMainpagePopupContext } from '../hooks/useMainpagePopupContext';
+import useMainpageContext from '../hooks/useMainpageContext';
+import useMainpageUiContext from '../hooks/useMainpageUiContenxt';
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -45,97 +47,7 @@ const DEFAULT_CATEGORIES: CategoryOption[] = [
 export const TaskModal = () => {
 
   const { mainPagePopupManager } = useMainpagePopupContext()
-  // Simulated AI loading state
-  const [isAiGeneratingSteps, setIsAiGeneratingSteps] = useState(false);
-
-  // Sync state with editingTask on open/change
-  useEffect(() => {
-    if (mainPagePopupManager.editingTask) {
-      mainPagePopupManager.setFormTitle(mainPagePopupManager.editingTask.title);
-      mainPagePopupManager.setFormDescription(mainPagePopupManager.editingTask.description || '');
-      mainPagePopupManager.setFormStatus(mainPagePopupManager.editingTask.status);
-      mainPagePopupManager.setFormPriority(mainPagePopupManager.editingTask.priority);
-      mainPagePopupManager.setFormCategory(mainPagePopupManager.editingTask.category);
-      mainPagePopupManager.setFormDueDate(mainPagePopupManager.editingTask.dueDate || '');
-      mainPagePopupManager.setFormSubtasks(mainPagePopupManager.editingTask.subtasks || []);
-    } else {
-      // Reset form for clean creation
-      mainPagePopupManager.setFormTitle('');
-      mainPagePopupManager.setFormDescription('');
-      mainPagePopupManager.setFormStatus('Pending');
-      mainPagePopupManager.setFormPriority('Medium');
-      // mainPagePopupManager.setFormCategory(categories[0]?.id || '');
-      mainPagePopupManager.setFormDueDate('');
-      mainPagePopupManager.setFormSubtasks([]);
-    }
-    mainPagePopupManager.setNewSubtaskInput('');
-  }, [mainPagePopupManager.editingTask, mainPagePopupManager.isOpen]);
-
-
-  // useEffect(() => {
-  //   console.log(formDueDate)
-  // }, [formDueDate])
-  // if (!isOpen) return null;
-
-  // --- Subtask Action Handlers ---
-  const addFormSubtask = () => {
-    if (!mainPagePopupManager.newSubtaskInput.trim()) return;
-    const newSub: Subtask = {
-      id: uuidv4(),
-      text: mainPagePopupManager.newSubtaskInput.trim(),
-      completed: false,
-    };
-    mainPagePopupManager.setFormSubtasks((prev) => [...prev, newSub]);
-    mainPagePopupManager.setNewSubtaskInput('');
-  };
-
-  const removeFormSubtask = (id: string) => {
-    mainPagePopupManager.setFormSubtasks((prev) => prev.filter((st) => st.id !== id));
-  };
-
-  const toggleFormSubtaskState = (id: string) => {
-    mainPagePopupManager.setFormSubtasks((prev) =>
-      prev.map((st) => (st.id === id ? { ...st, completed: !st.completed } : st))
-    );
-  };
-
-  // --- AI Subtask Generation Simulator ---
-  const handleAiBreakdown = () => {
-    if (!mainPagePopupManager.formTitle.trim()) {
-      alert('Please enter a task title first so the AI has context!');
-      return;
-    }
-    setIsAiGeneratingSteps(true);
-
-    // Simulating API latency response
-    setTimeout(() => {
-      const generatedSteps: Subtask[] = [
-        { id: crypto.randomUUID(), text: `Initial research regarding "${mainPagePopupManager.formTitle}"`, completed: false },
-        { id: crypto.randomUUID(), text: 'Draft primary project requirements', completed: false },
-        { id: crypto.randomUUID(), text: 'Review milestones with core stakeholders', completed: false },
-      ];
-      mainPagePopupManager.setFormSubtasks((prev) => [...prev, ...generatedSteps]);
-      setIsAiGeneratingSteps(false);
-    }, 1200);
-  };
-
-  // --- Form Submit Handler ---
-  const handleSaveTask = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const finalTask: Task = {
-      id: mainPagePopupManager.editingTask?.id || crypto.randomUUID(),
-      title: mainPagePopupManager.formTitle,
-      description: mainPagePopupManager.formDescription,
-      status: mainPagePopupManager.formStatus,
-      priority: mainPagePopupManager.formPriority,
-      category: mainPagePopupManager.formCategory,
-      dueDate: mainPagePopupManager.formDueDate,
-      subtasks: mainPagePopupManager.formSubtasks,
-    };
-
-  };
-
+  const { mainpageUiManager } = useMainpageUiContext()
 
   return (mainPagePopupManager.isOpen && <div className={`${styles.modalFixedContainer}`}>
     {/* Backdrop blur overlay */}
@@ -146,7 +58,7 @@ export const TaskModal = () => {
       {/* Header */}
       <div className={styles.modalHeader}>
         <h3 className={styles.modalHeaderTitle}>
-          {mainPagePopupManager.editingTask ? 'Edit Task Settings' : 'Create New Apex Task'}
+          {mainpageUiManager.editingTask ? 'Edit Task Settings' : 'Create New Apex Task'}
         </h3>
         <button onClick={() => { mainPagePopupManager.setOpen(false) }} className={styles.closeHeaderButton}>
           <X size={18} />
@@ -154,7 +66,7 @@ export const TaskModal = () => {
       </div>
 
       {/* Body Form */}
-      <form onSubmit={handleSaveTask} className={styles.formScrollableContainer}>
+      <form onSubmit={mainPagePopupManager.handleSaveTask} className={styles.formScrollableContainer}>
         <div className={styles.formWrapperSpace}>
 
           {/* Title */}
@@ -165,21 +77,10 @@ export const TaskModal = () => {
               </label>
               <button
                 type="button"
-                onClick={handleAiBreakdown}
-                disabled={isAiGeneratingSteps}
+                // onClick={handleAiBreakdown}
                 className={styles.aiGenerateButton}
               >
-                {isAiGeneratingSteps ? (
-                  <>
-                    <Loader2 className={styles.animateSpinner} size={12} />
-                    <span>Generating...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={12} />
-                    <span>✨ Auto-Generate Steps</span>
-                  </>
-                )}
+
               </button>
             </div>
             <input
@@ -255,7 +156,7 @@ export const TaskModal = () => {
             <label className={styles.formLabelBase}>Due Date</label>
             <div className={styles.relativePositionWrapper}>
               <input
-                type="date"
+                type="datetime-local"
                 required
                 value={mainPagePopupManager.formDueDate}
                 onChange={(e) => mainPagePopupManager.setFormDueDate(e.target.value)}
@@ -277,7 +178,7 @@ export const TaskModal = () => {
                   <div key={st.id} className={styles.subtaskRowContainer}>
                     <label
                       className={styles.subtaskInteractiveLabel}
-                      onClick={() => toggleFormSubtaskState(st.id)}
+                      onClick={() => mainPagePopupManager.toggleFormSubtaskState(st.id)}
                     >
                       {st.completed ? (
                         <CheckSquare
@@ -298,7 +199,7 @@ export const TaskModal = () => {
 
                     <button
                       type="button"
-                      onClick={() => removeFormSubtask(st.id)}
+                      onClick={() => mainPagePopupManager.removeFormSubtask(st.id)}
                       className={styles.deleteSubbutton}
                     >
                       Delete
@@ -318,14 +219,14 @@ export const TaskModal = () => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    addFormSubtask();
+                    mainPagePopupManager.addFormSubtask();
                   }
                 }}
                 className={styles.inputElementTextInline}
               />
               <button
                 type="button"
-                onClick={addFormSubtask}
+                onClick={mainPagePopupManager.addFormSubtask}
                 className={styles.addManualStepButton}
               >
                 Add Step

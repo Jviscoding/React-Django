@@ -11,6 +11,8 @@ import {
 import styles from './taskView.module.css';
 import { v4 as uuidv4 } from "uuid";
 import useMainpageUiContext from '../../hooks/useMainpageUiContenxt';
+import { useMainpagePopupContext } from '../../hooks/useMainpagePopupContext';
+import useMainpageContext from '../../hooks/useMainpageContext';
 
 // --- TS Interfaces ---
 export interface Subtask {
@@ -61,10 +63,11 @@ export const TaskView = ({
 
 
   // --- Local States ---
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const {mainpageUiManager} = useMainpageUiContext()
+    const {mainPagePopupManager} = useMainpagePopupContext()
+    const {mainpageManager} = useMainpageContext()
+
   // Modal states (For localized UI handling)
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   // --- Local Action Handlers ---
   const openCreateModal = () => {
@@ -80,21 +83,21 @@ export const TaskView = ({
       dueDate: new Date().toISOString().split('T')[0],
       subtasks: [{ id: 'adawrdhfgfg', text: "doing something out of context", "completed": false }, { id: 'addawrdhfgfg', text: "doing something out of context", "completed": false }, { id: 'adawrdhafgfg', text: "doing something out of context", "completed": false }]
     };
-    setTasks(prev => [...prev, newTask]);
+    mainpageManager.setTasks(prev => [...prev, newTask]);
   };
 
   const openEditModal = (task: Task) => {
-    setEditingTask(task);
+    mainpageUiManager.setEditingTask(task);
     // Trigger modal visibility/overlay logic here if needed
-    alert(`Editing task: ${task.title}`);
+    mainPagePopupManager.setOpen(true);
   };
 
   const handleDeleteTask = (id: string) => {
-    setTasks(prev => prev.filter(task => task.id !== id));
+    mainpageManager.setTasks(prev => prev.filter(task => task.id !== id));
   };
 
   const toggleTaskStatus = (id: string) => {
-    setTasks(prev => prev.map(task => {
+    mainpageManager.setTasks(prev => prev.map(task => {
       if (task.id === id) {
         const nextStatusMap: Record<Task['status'], Task['status']> = {
           'Pending': 'In Progress',
@@ -108,7 +111,7 @@ export const TaskView = ({
   };
 
   const handleToggleSubtask = (taskId: string, subtaskId: string) => {
-    setTasks(prev => prev.map(task => {
+    mainpageManager.setTasks(prev => prev.map(task => {
       if (task.id === taskId) {
         return {
           ...task,
@@ -134,7 +137,7 @@ export const TaskView = ({
     e.preventDefault();
     const taskId = e.dataTransfer.getData('text/plain');
 
-    setTasks(prev => prev.map(task =>
+    mainpageManager.setTasks(prev => prev.map(task =>
       task.id === taskId ? { ...task, status: targetStatus } : task
     ));
   };
@@ -160,7 +163,7 @@ export const TaskView = ({
 
 
   // 1. EMPTY STATE VIEW
-  if (tasks.length === 0) {
+  if (mainpageManager.tasks.length === 0) {
     return (
       <div className={`${styles.emptyCard}`}>
         <div className={styles.emptyIconWrapper}>
@@ -185,7 +188,7 @@ export const TaskView = ({
       <div className={`${styles.boardGrid}`}>
 
         {statuses.map((status) => {
-          const columnTasks = tasks.filter(t => t.status === status);
+          const columnTasks = mainpageManager.tasks.filter(t => t.status === status);
 
           return (
             <div
@@ -344,7 +347,7 @@ export const TaskView = ({
 
         {/* List Body Entries */}
         <div className={styles.tableBodyDivideContainers}>
-          {tasks.map((task) => {
+          {mainpageManager.tasks.map((task) => {
             const cat = getCategoryDetails(task.category);
             const completedSubtasks = task.subtasks?.filter(st => st.completed).length || 0;
             const totalSubtasks = task.subtasks?.length || 0;
