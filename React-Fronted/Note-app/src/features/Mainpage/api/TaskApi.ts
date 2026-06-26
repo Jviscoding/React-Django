@@ -1,8 +1,10 @@
+import type { SupabaseClient } from "@supabase/supabase-js"
+import { serverAddress } from "../../../shared/constants/constant"
+import { useAuthContext } from "../../Auth/hooks/useAuthContext.ts"
 
 
 type TaskApiType = {
-
-    getTasks: () => Promise<any>;
+    getAllTask: ()=>Promise<any>
 
 }
 
@@ -13,56 +15,70 @@ type TaskApiType = {
 export default function TaskApi(): TaskApiType {
 
 
+    const {authManager} = useAuthContext()
 
-    const getTasks = async () =>{
 
-        updateUser();
+    async function getAccessToken() {
+        const session =
+            await authManager.supabaseClient?.auth.getSession();
+
+        return session?.data.session?.access_token ?? null;
+    }
+
+    const getAllTask = async() => {
 
         try {
-            const request = await fetch(`http://127.0.0.1:8000/task_manager/?user_id=${1}`, {
-                method: 'GET'
-            });
 
 
-            const data = await request.json();
+            const accessToken = await getAccessToken();
 
-            console.log(data);
+                        console.log("FETCHINGG")
 
-            return data;
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const updateUser = async() =>{
- try {
-            const request = await fetch(`http://127.0.0.1:8000/task_manager/?user_id=${1}`, {
-                method: 'PUT',
+            const result =await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({value: "sample value"})
-            });
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+
+                }
+            })
 
 
-            const data = await request.json();
-
-            console.log(data);
-
-            return data;
+            const data = await result.json()
+            console.log(data)
 
         } catch (error) {
-            console.log(error);
+
         }
+
 
     }
 
 
-    return{
+    const updateTask = () => {
 
-        getTasks
 
+    }
+
+    const updateTaskState = () => {
+
+    }
+
+    const deleteTask = () => {
+
+    }
+
+    const updateSubtask = () => {
+
+    }
+
+
+
+
+    return {
+
+        getAllTask
     }
 
 

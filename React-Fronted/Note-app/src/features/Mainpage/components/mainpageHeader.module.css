@@ -1,3 +1,7 @@
+/* ==========================================================================
+   🌌 Adaptive Dashboard Header Module
+   ========================================================================== */
+
 /* --- Outer Base Flex Container Layout --- */
 .headerContainer {
   display: flex;
@@ -11,15 +15,17 @@
   font-size: 1.5rem; /* text-2xl equivalence */
   font-weight: 700;
   letter-spacing: -0.025em;
-  color: #ffffff;
+  color: var(--text-h); /* FIX: Tied to semantic header text token */
   margin: 0;
   line-height: 2rem;
+  font-family: var(--sans);
 }
 
 .subtitle {
   font-size: 0.875rem; /* text-sm equivalence */
-  color: #94a3b8; /* text-slate-400 */
+  color: var(--text); /* FIX: Automatically shifts density depending on mode */
   margin: 0;
+  font-family: var(--sans);
 }
 
 /* --- Controls Segment & Layout Alignments --- */
@@ -30,8 +36,8 @@
 }
 
 .toggleSegmentTrack {
-  background-color: #0f172a; /* bg-slate-900 */
-  border: 1px solid #1e293b; /* border-slate-800 */
+  background-color: var(--social-bg); /* FIX: Binds to local theme surface card instead of deep slate */
+  border: 1px solid var(--border); /* FIX: Adaptive unified separation border */
   padding: 0.125rem; /* p-0.5 */
   border-radius: 0.5rem; /* rounded-lg */
   display: inline-flex;
@@ -51,6 +57,7 @@
   cursor: pointer;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  font-family: var(--sans);
 }
 
 .toggleIcon {
@@ -60,39 +67,46 @@
 
 /* --- Context States for Segment Buttons --- */
 .toggleActive {
-  background-color: #4f46e5; /* bg-indigo-600 */
-  color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  background-color: var(--accent); /* FIX: Bound to core accent engine color */
+  border: 1px solid var(--accent-border);
+  color: #ffffff !important; /* Forces high visual accessibility contrasting output */
+  box-shadow: var(--shadow);
 }
 
 .toggleInactive {
-  color: #94a3b8; /* text-slate-400 */
+  color: var(--text);
 }
 
 .toggleInactive:hover {
-  color: #e2e8f0; /* hover:text-slate-200 */
+  color: var(--text-h);
+  background-color: var(--accent-bg); /* Fluid micro-hover wrapper tracking indicator */
 }
 
 /* --- Primary Command Layer Control --- */
 .createActionButton {
-  background-color: #4f46e5; /* bg-indigo-600 */
+  background-color: var(--accent); /* FIX: Tied to primary design accent system */
+  border: 1px solid var(--accent-border);
   color: #ffffff;
   font-size: 0.75rem; /* text-xs */
   font-weight: 600;
   padding: 0.625rem 1rem; /* px-4 py-2.5 */
   border-radius: 0.5rem; /* rounded-lg */
-  border: none;
   display: flex;
   align-items: center;
   gap: 0.375rem; /* gap-1.5 */
   cursor: pointer;
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.1);
-  transition: background-color 150ms ease;
+  box-shadow: var(--shadow);
+  transition: background-color 150ms ease, transform 100ms ease;
   user-select: none;
+  font-family: var(--sans);
 }
 
 .createActionButton:hover {
-  background-color: #6366f1; /* hover:bg-indigo-500 */
+  background-color: var(--hover); /* FIX: Shifts dynamically using universal interactive rules */
+}
+
+.createActionButton:active {
+  transform: scale(0.98); /* Tactile physics compression action feedback loop */
 }
 
 .createActionIcon {
@@ -100,7 +114,9 @@
   height: 1rem; /* h-4 */
 }
 
-/* --- Media Breakpoint Constraints (Tailwind md Equivalencies) --- */
+/* ==========================================================================
+   📱 Media Breakpoint Constraints (Tailwind md Equivalencies)
+   ========================================================================== */
 @media (min-width: 768px) {
   .headerContainer {
     flex-direction: row;

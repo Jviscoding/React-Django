@@ -10,31 +10,19 @@ import { TaskView } from '../components/TaskView/TaskView';
 import { TaskModal, type Task } from '../components/TaskModal';
 import { AlertCircle, CheckCircle, Clock, Folder } from 'lucide-react';
 import { MainPageHeader, type ViewMode } from '../components/MainpageHeader';
+import useMainpageContext from '../hooks/useMainpageContext';
 
 export default function Mainpage() {
 
-    const getData = TaskApi();
 
-    console.log("DADADA")
-
+    const {mainpageManager} = useMainpageContext()
     document.documentElement.setAttribute(
         "data-theme",
         "dark"
     );
-    useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                const response = await getData.getTasks();
-
-                console.log('Fetched tasks:', response);
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        }
-
-        fetchData();
-
+ 
+    useEffect(()=>{
+        mainpageManager.getAllTaskData()
     }, [])
 
     return (

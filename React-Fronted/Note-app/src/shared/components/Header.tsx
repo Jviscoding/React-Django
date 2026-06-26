@@ -30,10 +30,6 @@ export default function PageHeader({
               Pro Suite
             </span>
           </h1>
-
-          <p className={styles.brandSubtitle}>
-            Enterprise Core Task Management & Engine Console
-          </p>
         </div>
       </div>
 

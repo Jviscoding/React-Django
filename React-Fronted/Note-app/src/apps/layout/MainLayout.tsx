@@ -7,6 +7,7 @@ import { AuthUiContextProvider } from "../../features/Auth/context/AuthUiContext
 import PageHeader from "../../shared/components/Header";
 import MainpageUiPopupProvider from "../../features/Mainpage/context/MainpagePopupContext";
 import MainpageUiProvider from "../../features/Mainpage/context/MainpageUiContext";
+import MainpageProvider from "../../features/Mainpage/context/MainpageContext";
 
 
 // export const supabase = createClient(
@@ -29,30 +30,32 @@ const MainLayout = () => {
                 throw new Error("Function not implemented.");
             }} user={{ displayName: "John Vincent", email: "sample@gmail.com" }} />
 
-            <MainpageUiProvider>
+            <MainpageProvider>
+
+                <MainpageUiProvider>
 
 
-                <MainpageUiPopupProvider>
+                    <MainpageUiPopupProvider>
 
-                    <div className={styles.lowerContent}>
-                        <Sidebar />
+                        <div className={styles.lowerContent}>
+                            <Sidebar />
 
-                        {/* main page pop up handler */}
+                            {/* main page pop up handler */}
 
-                        <main className={styles.mainContent}>
-
-
-                            <div className={styles.contentWrapper}>
-                                <Outlet />
-
-                            </div>
-                        </main>
+                            <main className={styles.mainContent}>
 
 
-                    </div>
-                </MainpageUiPopupProvider>
-            </MainpageUiProvider>
+                                <div className={styles.contentWrapper}>
+                                    <Outlet />
 
+                                </div>
+                            </main>
+
+
+                        </div>
+                    </MainpageUiPopupProvider>
+                </MainpageUiProvider>
+            </MainpageProvider>
 
         </div >
 

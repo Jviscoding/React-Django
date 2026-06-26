@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { 
-  Home, 
-  Calendar, 
-  LogOut, 
-  Menu 
+import {
+  Home,
+  Calendar,
+  LogOut,
+  Menu
 } from "lucide-react";
 import { useAuthContext } from "../../features/Auth/hooks/useAuthContext.ts";
 import styles from './sidebar.module.css';
@@ -13,6 +13,7 @@ export const Sidebar: React.FC = () => {
   const location = useLocation();
   const { authManager } = useAuthContext();
   const [isNavBarHidden, setNavBarHidden] = useState<boolean>(false);
+  const [selectedNav, setSelectedNav] = useState<string>("Calendar");
 
   const toggleNavBar = useCallback(() => {
     setNavBarHidden((prev) => !prev);
@@ -20,62 +21,92 @@ export const Sidebar: React.FC = () => {
 
   const navItems = [
     { to: "/mainpage", label: "Dashboard", icon: Home },
-    { to: "/mainpage/brandAndProducts", label: "Calendar", icon: Calendar }
+    { to: "/mainpage/calendar", label: "Calendar", icon: Calendar }
   ];
 
-  const isRouteActive = (itemToPath: string) => {
-    if (itemToPath === "/mainpage") {
-      return location.pathname === "/mainpage" || location.pathname === "/mainpage/";
-    }
-    return location.pathname.startsWith(itemToPath);
-  };
+
 
   return (
     <aside className={`${styles.navBarContainer} ${isNavBarHidden ? styles.minNavBar : ""}`}>
-      
-      {/* Brand Header with dynamic layout continuity */}
-      <div className={styles.siteNameContainer}>
-        {isNavBarHidden ? (
-          /* Animated Initial/Logo Token when minimized so it looks intentional */
-          <div className={styles.brandMinToken}>S</div>
-        ) : (
-          /* Full typography identity layout */
-          <div className={styles.titleContainer}>
-            <p>Stockora</p>
-          </div>
-        )}
-        
-        <i 
-          onClick={toggleNavBar} 
-          role="button" 
-          aria-label="Toggle Navigation Control Menu"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
-        >
-          <Menu className={styles.icon} />
-        </i>
-      </div>
+
+      {isNavBarHidden ?
+        <div className={styles.collapsedMenuBtn}>
+          <i
+            onClick={toggleNavBar}
+            className={`${styles.menuBtnContainer}`}
+            role="button"
+            aria-label="Toggle Navigation Control Menu"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
+          >
+            <Menu className={styles.icon} />
+          </i>
+        </div> :
+        ""
+      }
 
       {/* Main Navigation Track */}
       <div className={styles.linkContainer}>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = isRouteActive(item.to);
 
           return (
-            <Link
-              key={item.to}
-              to={item.to}
-              draggable={false}
-              className={`${isActive ? styles.navBarSelected : ""} ${
-                isNavBarHidden ? styles.toggleLinkHide : ""
-              }`}
-            >
-              <Icon className={styles.icon} />
-              <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
-                {item.label}
-              </p>
-            </Link>
+
+            <>
+              {item.label === "Dashboard" ?
+
+
+                <div className={styles.dashboardMenu}>
+                  <Link
+                    onClick={() => setSelectedNav(item.label)}
+                    key={item.to}
+                    to={item.to}
+                    draggable={false}
+                    className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
+                      }`}
+                  >
+                    <Icon className={styles.icon} />
+                    <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
+                      {item.label}
+                    </p>
+                  </Link>
+                  {isNavBarHidden ? ""
+                    :
+                    <i
+                      onClick={toggleNavBar}
+                      className={`${styles.menuBtnContainer} ${styles.showMenu}`}
+                      role="button"
+                      aria-label="Toggle Navigation Control Menu"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
+                    >
+                      <Menu className={styles.icon} />
+                    </i>
+                  }
+
+
+                </div>
+
+                :
+
+                // when dashboard button was not set
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setSelectedNav(item.label)}
+                  draggable={false}
+                  className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
+                    }`}
+                >
+                  <Icon className={styles.icon} />
+                  <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
+                    {item.label}
+                  </p>
+                </Link>
+
+              }
+            </>
+
           );
         })}
 
@@ -96,3 +127,20 @@ export const Sidebar: React.FC = () => {
 };
 
 export default Sidebar;
+
+
+/***
+ * 
+      <div className={styles.siteNameContainer}>
+        
+        <i
+          onClick={toggleNavBar}
+          role="button"
+          aria-label="Toggle Navigation Control Menu"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
+        >
+          <Menu className={styles.icon} />
+        </i>
+      </div>
+ */

@@ -397,7 +397,7 @@
 
 .addManualStepButton {
   background-color: var(--accent);
-  color: var(--text-h);
+  color: white;
   padding: 0 0.75rem;
   border-radius: 0.75rem;
   font-size: 0.75rem;
