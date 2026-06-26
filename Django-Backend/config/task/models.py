@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from core.models import User
 
@@ -10,7 +12,7 @@ class Task(models.Model):
         TODO = 'Pending'
         IN_PROGRESS = 'In Progress'
         DONE = 'Completed'
-
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="tasks", null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField( blank=True)
@@ -23,7 +25,7 @@ class Task(models.Model):
 
 
 class SubTaskCheckList(models.Model):
-
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,)
     task = models.ForeignKey(Task, on_delete=models.CASCADE,related_name="checklists")
     text = models.TextField()
     is_done = models.BooleanField(default=False)

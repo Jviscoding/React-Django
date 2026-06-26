@@ -78,7 +78,7 @@ export default function useMainpagePopup(): UseMainpagePopupType {
             setFormDescription('');
             setFormStatus('Pending');
             setFormPriority('Medium');
-            // setFormCategory(categories[0]?.id || '');
+            setFormCategory('');
             setFormDueDate('');
             setFormSubtasks([]);
         }
