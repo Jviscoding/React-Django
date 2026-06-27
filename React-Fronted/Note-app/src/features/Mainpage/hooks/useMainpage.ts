@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useAuthContext } from "../../Auth/hooks/useAuthContext.ts"
+import React, { useEffect, useState } from "react";
 import TaskApi from "../api/TaskApi.js";
+import { useAuthContext } from "../../Auth/hooks/useAuthContext.ts.js";
 
 
 export type UseMainpageType = {
@@ -58,10 +58,71 @@ const DEFAULT_CATEGORIES: CategoryOption[] = [
 
 export default function useMainpage(): UseMainpageType {
 
-    const taskApiManager = TaskApi()
     const [tasks, setTasks] = useState<Task[]>([]);
-    
+    const { authManager } = useAuthContext();
 
+    const taskApiManager = TaskApi()
+
+    useEffect(() => {
+
+
+        if (authManager.userData) {
+            const initGetTask = async () => {
+
+                await getAllTaskData();
+            }
+
+
+            initGetTask()
+        }
+
+
+    }, [authManager.userData])
+
+    const convertData = (data: []) => {
+
+        const tasks = data.reduce((prev: Task[], curr: any) => {
+            console.log(curr)
+
+
+
+            const subtask = curr.subtasks.reduce((prev_subtask: Subtask[], curr_subtask: any) => {
+
+
+
+                prev_subtask.push({
+                    id: curr_subtask.id,
+                    text: curr_subtask.text,
+                    completed: curr_subtask.is_done
+                })
+
+
+
+                return prev_subtask
+
+            }, [])
+
+
+            prev.push({
+                id: curr.id,
+                title: curr.title,
+                status: curr.status,
+                priority: curr.priority,
+                category: curr.category,
+                dueDate: curr.due_date,
+                subtasks: subtask
+            })
+
+
+
+
+            return prev
+        }, [])
+
+
+        setTasks(tasks)
+
+    }
 
 
 
@@ -70,7 +131,10 @@ export default function useMainpage(): UseMainpageType {
 
             const request = await taskApiManager.getAllTask();
 
-            console.log(request)
+            if (request.success) {
+                convertData(request.data)
+            }
+
 
         } catch (error) {
 

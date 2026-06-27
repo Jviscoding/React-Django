@@ -1,6 +1,5 @@
 import React, { createContext, useMemo } from "react";
 import type { UseMainpageType } from "../hooks/useMainpage";
-import  useMainpageUi, {type UseMainpageUiType}  from "../hooks/useMainpageUi";
 import useMainpage from "../hooks/useMainpage";
 
 

@@ -40,8 +40,7 @@ export default function TaskApi(): TaskApiType {
             })
 
 
-            const data = await result.json()
-            console.log(data)
+            return await result.json()
 
         } catch (error) {
 
@@ -51,7 +50,7 @@ export default function TaskApi(): TaskApiType {
     }
 
 
-    const createTask = async(task: Task) => {
+    const createTask = async (task: Task) => {
 
 
         console.log(task)

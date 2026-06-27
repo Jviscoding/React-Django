@@ -3,22 +3,60 @@ from rest_framework.views import APIView, Response, status
 from .models import Task, SubTaskCheckList
 from core.models import User
 from django.db import transaction
-
+from .Serializers.TaskSerializer import TaskSerializer
 
 
 class TaskView(APIView):
-    
-    def get(self, request):
-            print("DADADADA")
-            
 
-            return Response({"data":"DADAD"}, status=200)
+    def get(self, request):
+
+        try:
+
+            user = User.objects.get(pk=request.user["sub"])
+
+            # usin prefetch_related also fetched the related column to the other db table to get other data
+            # the value of this is what you set on the models at part (related_name)
+            # it was same as calling tasks.checklist.all()
+            tasks = Task.objects.filter(user=user).prefetch_related("checklists")
+
+            serialized_task = TaskSerializer(tasks, many=True)
+
+            return Response(
+                {
+                    "success": True,
+                    "message": "Tasks data retrieve successfully!",
+                    "data": serialized_task.data,
+                }
+            )
+
+        except User.DoesNotExist:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except KeyError as e:
+            return Response(
+                {"message": f"Missing required field: {e}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        except Exception as e:
+            return Response(
+                {
+                    "message": "Failed to retrieve task data.",
+                    "error": str(e),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response({"data": serialized_task.data}, status=200)
 
     def post(self, request):
 
         try:
             user_task_data = request.data["task"]
-            
+
             user = User.objects.get(pk=request.user["sub"])
 
             with transaction.atomic():
@@ -39,33 +77,29 @@ class TaskView(APIView):
                         text=subtask["text"],
                         is_done=subtask["completed"],
                     )
-                    
+
                 subtasks = SubTaskCheckList.objects.filter(task=task).values()
-                        
-                user_task_data['subtasks'] = list(subtasks)
+
+                user_task_data["subtasks"] = list(subtasks)
 
             return Response(
                 {
                     "message": "Task created successfully.",
-                    'status: success': True,
-                    'data': user_task_data
+                    "status: success": True,
+                    "data": user_task_data,
                 },
                 status=status.HTTP_201_CREATED,
             )
 
         except User.DoesNotExist:
             return Response(
-                {
-                    "message": "User not found."
-                },
+                {"message": "User not found. dawdawdawdwa"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         except KeyError as e:
             return Response(
-                {
-                    "message": f"Missing required field: {e}"
-                },
+                {"message": f"Missing required field: {e}"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

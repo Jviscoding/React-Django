@@ -18,10 +18,6 @@ export default function Mainpage() {
         "data-theme",
         "dark"
     );
- 
-    useEffect(()=>{
-        // mainpageManager.createNewTask()
-    }, [])
 
     return (
         <div className={styles.mainWrapper}>

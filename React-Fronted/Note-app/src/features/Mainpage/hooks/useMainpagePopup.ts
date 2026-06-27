@@ -117,7 +117,7 @@ export default function useMainpagePopup(): UseMainpagePopupType {
         e.preventDefault();
 
         const finalTask: Task = {
-            id: mainpageUiManager.editingTask?.id || crypto.randomUUID(),
+            id: mainpageUiManager.editingTask?.id || uuidv4(),
             title: formTitle,
             description:formDescription,
             status: formStatus,

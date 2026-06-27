@@ -50,65 +50,65 @@ export const Sidebar: React.FC = () => {
         {navItems.map((item) => {
           const Icon = item.icon;
 
-          return (
-
-            <>
-              {item.label === "Dashboard" ?
+          return item.label === "Dashboard" ?
 
 
-                <div className={styles.dashboardMenu}>
-                  <Link
-                    onClick={() => setSelectedNav(item.label)}
-                    key={item.to}
-                    to={item.to}
-                    draggable={false}
-                    className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
-                      }`}
-                  >
-                    <Icon className={styles.icon} />
-                    <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
-                      {item.label}
-                    </p>
-                  </Link>
-                  {isNavBarHidden ? ""
-                    :
-                    <i
-                      onClick={toggleNavBar}
-                      className={`${styles.menuBtnContainer} ${styles.showMenu}`}
-                      role="button"
-                      aria-label="Toggle Navigation Control Menu"
-                      tabIndex={0}
-                      onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
-                    >
-                      <Menu className={styles.icon} />
-                    </i>
-                  }
+            <div
+              className={styles.dashboardMenu}
+              key={item.to}
+            >
 
-
-                </div>
-
+              <Link
+                onClick={() => setSelectedNav(item.label)}
+                key={item.to}
+                to={item.to}
+                draggable={false}
+                className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
+                  }`}
+              >
+                <Icon className={styles.icon} />
+                <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
+                  {item.label}
+                </p>
+              </Link>
+              {isNavBarHidden ? ""
                 :
-
-                // when dashboard button was not set
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setSelectedNav(item.label)}
-                  draggable={false}
-                  className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
-                    }`}
+                <i
+                  onClick={toggleNavBar}
+                  className={`${styles.menuBtnContainer} ${styles.showMenu}`}
+                  role="button"
+                  aria-label="Toggle Navigation Control Menu"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && toggleNavBar()}
                 >
-                  <Icon className={styles.icon} />
-                  <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
-                    {item.label}
-                  </p>
-                </Link>
-
+                  <Menu className={styles.icon} />
+                </i>
               }
-            </>
 
-          );
-        })}
+
+            </div>
+
+            :
+
+            // when dashboard button was not set
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setSelectedNav(item.label)}
+              draggable={false}
+              className={`${selectedNav === item.label ? styles.navBarSelected : ""} ${isNavBarHidden ? styles.toggleLinkHide : ""
+                }`}
+            >
+              <Icon className={styles.icon} />
+              <p className={`${styles.navBarLabel} ${isNavBarHidden ? styles.hideNavBarLabel : ""}`}>
+                {item.label}
+              </p>
+            </Link>
+
+        }
+
+
+        )}
 
         {/* Global Security Logout Interface */}
         <button

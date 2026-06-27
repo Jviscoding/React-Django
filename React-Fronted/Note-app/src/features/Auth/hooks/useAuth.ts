@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react"
+import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react"
 import { serverAddress } from "../../../shared/constants/constant"
 import { createClient, SupabaseClient } from "@supabase/supabase-js"
 import { LassoSelect } from "lucide-react"
@@ -13,6 +13,8 @@ export type UseAuthType = {
     signIn: (Arg0: SignInType) => Promise<any>;
     signUp: (Arg0: SignUpType) => Promise<any>;
     signOut: () => Promise<any>
+    userData:UserDataType | null
+    setUserData: React.Dispatch<React.SetStateAction<UserDataType | null>>
 }
 
 export type UserDataType = {
@@ -295,7 +297,9 @@ export default function useAuth(): UseAuthType {
         setSupabaseClient,
         signIn,
         signUp,
-        signOut
+        signOut,
+        userData,
+        setUserData
     }
 
 
