@@ -16,7 +16,7 @@ export default function Mainpage() {
 
     document.documentElement.setAttribute(
         "data-theme",
-        "dark"
+        "light"
     );
 
     return (
