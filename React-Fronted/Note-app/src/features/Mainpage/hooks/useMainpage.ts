@@ -7,6 +7,7 @@ export type UseMainpageType = {
 
     getAllTaskData: () => Promise<any>
     createNewTask: (task: Task) => Promise<any>
+    deleteExistingTask: (taskId: string) => Promise<any>
 
     tasks: Task[]
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>
@@ -54,8 +55,6 @@ const DEFAULT_CATEGORIES: CategoryOption[] = [
     { id: 'shopping', name: 'Shopping' },
 ];
 
-
-
 export default function useMainpage(): UseMainpageType {
 
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -77,7 +76,17 @@ export default function useMainpage(): UseMainpageType {
         }
 
 
-    }, [authManager.userData])
+
+
+    }, [authManager.userData]);
+
+    useEffect(() => {
+        console.log(tasks)
+    }, [tasks])
+
+
+
+
 
     const convertData = (data: []) => {
 
@@ -113,14 +122,33 @@ export default function useMainpage(): UseMainpageType {
                 subtasks: subtask
             })
 
-
-
-
             return prev
         }, [])
 
 
-        setTasks(tasks)
+        setTasks(tasks);
+
+    }
+
+    const syncTaskId = (data: any) => {
+
+        console.log("AT SYNC")
+
+        setTasks(prev => {
+            if (!prev) return prev;
+
+            return prev.map((task: Task) => {
+
+                if (task.id === data.old_id) {
+                    return {
+                        ...task, id: data.data.id
+                    }
+                }
+                return task
+            })
+
+
+        })
 
     }
 
@@ -146,7 +174,21 @@ export default function useMainpage(): UseMainpageType {
 
             const request = await taskApiManager.createTask(task);
 
-            console.log(request)
+            if (request.success) {
+
+                syncTaskId(request)
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+    const deleteExistingTask = async (taskId: string) => {
+
+        try {
+
+            const request = taskApiManager.deleteTask(taskId)
 
         } catch (error) {
 
@@ -155,12 +197,12 @@ export default function useMainpage(): UseMainpageType {
 
 
 
-
     return {
         getAllTaskData,
         createNewTask,
         tasks,
-        setTasks
+        setTasks,
+        deleteExistingTask
 
     }
 }

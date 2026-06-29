@@ -58,6 +58,7 @@ class TaskView(APIView):
             user_task_data = request.data["task"]
 
             user = User.objects.get(pk=request.user["sub"])
+            
 
             with transaction.atomic():
 
@@ -77,23 +78,26 @@ class TaskView(APIView):
                         text=subtask["text"],
                         is_done=subtask["completed"],
                     )
-
-                subtasks = SubTaskCheckList.objects.filter(task=task).values()
-
-                user_task_data["subtasks"] = list(subtasks)
+                    
+            
+            subtasks = SubTaskCheckList.objects.filter(task=task).values()
+            user_task_data["subtasks"] = list(subtasks)
+            old_id = user_task_data['id']
+            user_task_data["id"] = task.id
 
             return Response(
                 {
                     "message": "Task created successfully.",
-                    "status: success": True,
+                    "success": True,
                     "data": user_task_data,
+                    "old_id": old_id
                 },
                 status=status.HTTP_201_CREATED,
             )
 
         except User.DoesNotExist:
             return Response(
-                {"message": "User not found. dawdawdawdwa"},
+                {"message": "User not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -111,3 +115,41 @@ class TaskView(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+            
+    def delete(self, request):
+        try:
+            # check if user do exist
+            user = User.objects.get(pk=request.user["sub"]);
+            task_id = request.data['task_id']
+            
+            
+            task  = Task.objects.get(user=user, id=task_id);
+            
+            task.delete()
+        
+            
+            return Response(
+                {
+                    "success": True, 
+                    "message": "Task removed successfully",
+                    "data": {"deleted_task_id":task_id}}
+            )
+            
+            
+        
+        except User.DoesNotExist:
+            return Response(
+                {"message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+            
+        except Task.DoesNotExist:
+             return Response(
+                {"message": "Task already deleted."},
+                status=status.HTTP_200_OK,
+            )
+            
+
+        
+        
+        

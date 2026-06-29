@@ -7,6 +7,7 @@ import type { Task } from "../hooks/useMainpage.ts"
 type TaskApiType = {
     getAllTask: () => Promise<any>
     createTask: (task: Task) => Promise<any>
+    deleteTask: (taskId: string) => Promise<any>
 }
 
 
@@ -53,7 +54,7 @@ export default function TaskApi(): TaskApiType {
     const createTask = async (task: Task) => {
 
 
-        console.log(task)
+        // console.log(task)
 
         try {
             const accessToken = await getAccessToken();
@@ -72,9 +73,39 @@ export default function TaskApi(): TaskApiType {
 
 
             const data = await result.json()
-            console.log(data)
+
+            return data
 
         } catch (error) {
+
+        }
+    }
+
+
+    const deleteTask = async (taskId: string) => {
+        try {
+            const accessToken = await getAccessToken();
+
+            const result = await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+
+                },
+                body: JSON.stringify({
+                    task_id: taskId
+                })
+            })
+
+
+            const data = await result.json()
+            console.log(data)
+
+            return data
+        } catch (error) {
+
+            console.log(error)
 
         }
     }
@@ -89,9 +120,6 @@ export default function TaskApi(): TaskApiType {
 
     }
 
-    const deleteTask = () => {
-
-    }
 
     const updateSubtask = () => {
 
@@ -103,7 +131,8 @@ export default function TaskApi(): TaskApiType {
     return {
 
         getAllTask,
-        createTask
+        createTask,
+        deleteTask
     }
 
 
