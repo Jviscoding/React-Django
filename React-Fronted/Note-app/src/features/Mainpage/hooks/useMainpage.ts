@@ -119,7 +119,8 @@ export default function useMainpage(): UseMainpageType {
                 priority: curr.priority,
                 category: curr.category,
                 dueDate: curr.due_date,
-                subtasks: subtask
+                subtasks: subtask,
+                description: curr.description
             })
 
             return prev
