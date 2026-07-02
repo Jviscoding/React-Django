@@ -478,3 +478,51 @@
   color: #ef4444 !important;
   border-color: #fee2e2 !important;
 }
+
+
+/* Container Utility */
+.relativeContainer {
+    position: relative;
+}
+
+/* Sync Status Badge Base Wrapper */
+.syncBadge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 11px;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+}
+
+/* State: Syncing (Rotating loader look) */
+.syncing {
+    background-color: rgba(59, 130, 246, 0.1); /* Subtle blue */
+    color: #3b82f6;
+}
+
+/* State: Synced (Static checkmark success state) */
+.synced {
+    background-color: rgba(16, 185, 129, 0.1); /* Subtle green */
+    color: #10b981;
+}
+
+/* Infinite rotation animation for the syncing icon loop */
+.spinIcon {
+    animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

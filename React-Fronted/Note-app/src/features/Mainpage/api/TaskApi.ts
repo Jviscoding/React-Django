@@ -1,13 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { serverAddress } from "../../../shared/constants/constant"
 import { useAuthContext } from "../../Auth/hooks/useAuthContext.ts"
-import type { Task } from "../hooks/useMainpage.ts"
+import type { Subtask, Task } from "../hooks/useMainpage.ts"
 
 
 type TaskApiType = {
     getAllTask: () => Promise<any>
     createTask: (task: Task) => Promise<any>
     deleteTask: (taskId: string) => Promise<any>
+    updateSubTask: (taskId: string, subtasks: Subtask[]) => Promise<any>
 }
 
 
@@ -81,6 +82,38 @@ export default function TaskApi(): TaskApiType {
         }
     }
 
+    
+
+    const updateSubTask = async (taskId: string, subtasks: Subtask[]) => {
+
+
+        try {
+            const accessToken = await getAccessToken();
+
+            const result = await fetch(`${serverAddress.ip}:${serverAddress.port}/api/task`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+
+                },
+                body: JSON.stringify({
+                    task_id:taskId,
+                    updated_task_data: subtasks
+                })
+            })
+
+
+            const data = await result.json()
+
+            return data
+
+        } catch (error) {
+
+        }
+    }
+
+
 
     const deleteTask = async (taskId: string) => {
         try {
@@ -100,7 +133,6 @@ export default function TaskApi(): TaskApiType {
 
 
             const data = await result.json()
-            console.log(data)
 
             return data
         } catch (error) {
@@ -121,9 +153,6 @@ export default function TaskApi(): TaskApiType {
     }
 
 
-    const updateSubtask = () => {
-
-    }
 
 
 
@@ -132,7 +161,8 @@ export default function TaskApi(): TaskApiType {
 
         getAllTask,
         createTask,
-        deleteTask
+        deleteTask,
+        updateSubTask,
     }
 
 

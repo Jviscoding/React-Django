@@ -1,26 +1,32 @@
-import type { Task } from '../../hooks/useMainpage';
+import { useEffect } from 'react';
+import type { Subtask, Task } from '../../hooks/useMainpage';
 import useMainpageContext from '../../hooks/useMainpageContext';
 import { useMainpagePopupContext } from '../../hooks/useMainpagePopupContext';
 import useMainpageUiContext from '../../hooks/useMainpageUiContenxt';
-import styles from './task.module.css'
+import styles from './task.module.css';
 import {
     ListTodo,
     Calendar,
     Circle,
     CheckCircle2,
     Edit2,
-    Trash2
+    Trash2,
+    RefreshCw, // Added for syncing state
+    Check      // Added for synced state
 } from 'lucide-react';
+
 type props = {
-    task: Task,
-    viewMode: 'board' | 'list'
+    task: Task;
+    viewMode: 'board' | 'list';
+    isSyncing?: boolean; // Added sync status prop
 }
 
-export default function TaskContent({ task, viewMode }: props) {
+export default function TaskContent({ task, viewMode}: props) {
 
-    const { mainpageManager } = useMainpageContext()
-    const { mainpageUiManager } = useMainpageUiContext()
-    const { mainPagePopupManager } = useMainpagePopupContext()
+    const { mainpageManager } = useMainpageContext();
+    const { mainpageUiManager } = useMainpageUiContext();
+    const { mainPagePopupManager } = useMainpagePopupContext();
+
     // --- HTML5 Drag and Drop Handlers ---
     const handleDragStart = (e: React.DragEvent, taskId: string) => {
         e.dataTransfer.setData('text/plain', taskId);
@@ -36,14 +42,10 @@ export default function TaskContent({ task, viewMode }: props) {
         }
     };
 
-
     const openEditModal = (task: Task) => {
         mainpageUiManager.setEditingTask(task);
-        // Trigger modal visibility/overlay logic here if needed
         mainPagePopupManager.setOpen(true);
     };
-
-
 
     const toggleTaskStatus = (id: string) => {
         mainpageManager.setTasks(prev => prev.map(task => {
@@ -59,20 +61,6 @@ export default function TaskContent({ task, viewMode }: props) {
         }));
     };
 
-    const handleToggleSubtask = (taskId: string, subtaskId: string) => {
-        mainpageManager.setTasks(prev => prev.map(task => {
-            if (task.id === taskId) {
-                return {
-                    ...task,
-                    subtasks: task.subtasks?.map(sub =>
-                        sub.id === subtaskId ? { ...sub, completed: !sub.completed } : sub
-                    )
-                };
-            }
-            return task;
-        }));
-    };
-
     const getStatusStyle = (status: Task['status']): string => {
         switch (status) {
             case 'Completed': return styles.statusCompleted;
@@ -82,10 +70,22 @@ export default function TaskContent({ task, viewMode }: props) {
         }
     };
 
-
     const completedSubtasks = task.subtasks?.filter(st => st.completed).length || 0;
     const totalSubtasks = task.subtasks?.length || 0;
 
+    // Reusable Sync Status Badge Component
+    const SyncStatusBadge = () => (
+        <div 
+            className={`${styles.syncBadge} ${mainpageManager.pendingStatus.get(task.id) ?? 0 > 0 ? styles.syncing : styles.synced}`}
+            title={mainpageManager.pendingStatus.get(task.id) ?? 0 > 0 ? "Syncing changes..." : "All changes synced"}
+        >
+            {mainpageManager.pendingStatus.get(task.id) ?? 0 > 0 ? (
+                <RefreshCw size={12} className={styles.spinIcon} />
+            ) : (
+                <Check size={12} />
+            )}
+        </div>
+    );
 
     if (viewMode === 'board') {
         return (
@@ -93,8 +93,11 @@ export default function TaskContent({ task, viewMode }: props) {
                 key={task.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, task.id)}
-                className={styles.taskCard}
+                className={`${styles.taskCard} ${styles.relativeContainer}`}
             >
+                {/* Sync Status Badge */}
+                <SyncStatusBadge />
+
                 {/* Priority and Category Badges */}
                 <div className={styles.cardBadgesRow}>
                     <span className={`${styles.badgeBase} ${getPriorityStyle(task.priority)}`}>
@@ -133,14 +136,13 @@ export default function TaskContent({ task, viewMode }: props) {
                             ></div>
                         </div>
 
-                        {/* Collapsible checklist preview in Board mode */}
                         <div className={styles.boardChecklistInteractiveList}>
-                            {task.subtasks?.map(sub => (
+                            {task.subtasks?.map((sub: Subtask) => (
                                 <label key={sub.id} className={styles.checklistRowCheckboxLabel}>
                                     <input
                                         type="checkbox"
                                         checked={sub.completed}
-                                        onChange={() => handleToggleSubtask(task.id, sub.id)}
+                                        onChange={() => mainpageManager.handleToggleSubtask(task.id, sub.id)}
                                         className={styles.nativeInputElementCheckbox}
                                     />
                                     <span className={sub.completed ? styles.lineThroughColorMuted : ''}>
@@ -185,11 +187,14 @@ export default function TaskContent({ task, viewMode }: props) {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     return (
-        <div key={task.id} className={styles.tableRowInteractiveItemGrid}>
+        <div key={task.id} className={`${styles.tableRowInteractiveItemGrid} ${styles.relativeContainer}`}>
+            
+            {/* Sync Status Badge */}
+            <SyncStatusBadge />
 
             {/* Task Info Column */}
             <div className={styles.colSpan5FlexibleRowAlignment}>
@@ -221,7 +226,7 @@ export default function TaskContent({ task, viewMode }: props) {
                                         <input
                                             type="checkbox"
                                             checked={sub.completed}
-                                            onChange={() => handleToggleSubtask(task.id, sub.id)}
+                                            onChange={() => mainpageManager.handleToggleSubtask(task.id, sub.id)}
                                             className={styles.nativeInputElementCheckbox}
                                         />
                                         <span className={sub.completed ? styles.opacityMutedStrikethrough : ''}>
@@ -279,7 +284,5 @@ export default function TaskContent({ task, viewMode }: props) {
             </div>
 
         </div>
-    )
-
+    );
 }
-

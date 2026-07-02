@@ -32,5 +32,8 @@ class SubTaskCheckList(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
 
+    def __str__(self):
+        return self.id,self.text,self.is_done,self.date_created
+
     class Meta:
         ordering = ["date_created"]

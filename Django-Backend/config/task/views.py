@@ -4,6 +4,7 @@ from .models import Task, SubTaskCheckList
 from core.models import User
 from django.db import transaction
 from .Serializers.TaskSerializer import TaskSerializer
+from .Serializers.SubTaskSerializer import SubTaskSerializer
 
 
 
@@ -51,7 +52,6 @@ class TaskView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        return Response({"data": serialized_task.data}, status=200)
 
     def post(self, request):
 
@@ -72,18 +72,29 @@ class TaskView(APIView):
                     category=user_task_data["category"],
                     due_date=user_task_data["dueDate"],
                 )
+                
+                old_subtasks_id = []
 
                 for subtask in user_task_data["subtasks"]:
-                    SubTaskCheckList.objects.create(
+                    subtask_data = SubTaskCheckList.objects.create(
                         task=task,
                         text=subtask["text"],
                         is_done=subtask["completed"],
                     )
                     
+                    subtask_ids = {}
+                    subtask_ids["old_id"] = subtask["id"]
+                    subtask_ids["new_id"] = subtask_data.id
+                    old_subtasks_id.append(subtask_ids)
+                    
             
             subtasks = SubTaskCheckList.objects.filter(task=task).values()
             user_task_data["subtasks"] = list(subtasks)
             old_id = user_task_data['id']
+            
+
+
+            
             user_task_data["id"] = task.id
 
             return Response(
@@ -91,7 +102,8 @@ class TaskView(APIView):
                     "message": "Task created successfully.",
                     "success": True,
                     "data": user_task_data,
-                    "old_id": old_id
+                    "old_id": old_id,
+                    "old_subtasks_id": old_subtasks_id
                 },
                 status=status.HTTP_201_CREATED,
             )
@@ -147,9 +159,62 @@ class TaskView(APIView):
         except Task.DoesNotExist:
              return Response(
                 {"message": "Task already deleted."},
+                {"data": {"deleted_task_id":task_id}},
                 status=status.HTTP_200_OK,
             )
+    
+    
+    def patch(self, request):
+        
+        try:
+            user = User.objects.get(pk=request.user["sub"])
+            task_id = request.data['task_id']
+            updated_task_data = request.data['updated_task_data']
             
+            
+            task = Task.objects.get(user=user, id=task_id)
+
+            subtasks = SubTaskCheckList.objects.filter(task=task)
+            
+            for subtask in subtasks:
+                for updated in updated_task_data:
+                    
+                    
+
+                    if str(subtask.id) == updated['id']:
+                        subtask.text = updated['text']
+                        subtask.is_done = updated['completed']
+                        subtask.save()  
+                        
+                    
+            return Response(
+            {
+                "success": True,
+                "message": "Task updated successfully",
+                "data": {"subtasks": SubTaskSerializer(subtasks, many=True).data, "task_id": task_id}
+            }
+            )
+        
+        except User.DoesNotExist:
+            return Response(
+                {"message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        except Task.DoesNotExist:
+             return Response(
+                {"message": "Task not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        except Exception as e:
+            return Response(
+                {
+                    "message": "Failed to update task.",
+                    "error": str(e),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         
         
